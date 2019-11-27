@@ -30,8 +30,12 @@ body.format-multitopic div#course-header > p#course-header-banner_attribution {
 
 /* Tabs */
 /* INCLUDED moodle/course/format/onetopic CHANGED. */
+body.format-multitopic .course-content ul.nav-tabs li a {
+    padding: 0;
+}
 body.format-multitopic .course-content ul.nav-tabs li a .tab_content {
     border-top: transparent 2px solid;
+    padding: 0.5rem 1rem;
 }
 body.format-multitopic .course-content ul.nav-tabs li a .tab_content.marker {
     border-top: #06c 2px solid;

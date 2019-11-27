@@ -58,6 +58,12 @@ $string['level_help'] = 'Set the section level.  '
                       . 'Where possible, it is recommended to use page "Edit" menu options "Raise page level" and "Lower page level" instead.';
 // END INCLUDED.
 
+// INCLUDED /course/format/onetopic/lang/en/format_onetopic.php $string['cssstyles'] - $string['cssstyles_help'] CHANGED.
+$string['cssstyles'] = 'Page tab CSS properties';
+$string['cssstyles_help'] = 'CSS properties for the page\'s tab.<br />e.g. background: blue; color: white;<br />'
+                          . '(Not applicable to topics.)';
+// END INCLUDED.
+
 // INCLUDED /course/format/periods/lang/en/format_periods.php $string['perioddurationdefault'] - $string['perioddurationoverride_help'] CHANGED.
 $string['perioddurationdefault'] = 'Topic duration';
 $string['perioddurationoverride'] = 'Override topic duration';

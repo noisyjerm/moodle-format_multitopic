@@ -675,6 +675,10 @@ class format_multitopic_renderer extends format_section_renderer_base {         
                     ($thissection->visible || !$course->hiddensections)
                     && ($thissection->available || !empty($thissection->availableinfo));
 
+            // Fetch custom CSS style for tab.
+            $formatoptions = course_get_format($course)->get_format_options($thissection);
+            $customstyles = (is_array($formatoptions) && !empty($formatoptions['cssstyles'])) ? $formatoptions['cssstyles'] : '';
+
             // Make and add tabs for visible pages.
             if ($thissection->levelsan <= FORMAT_MULTITOPIC_SECTION_LEVEL_ROOT
                 || $thissection->levelsan < FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC
@@ -699,7 +703,8 @@ class format_multitopic_renderer extends format_section_renderer_base {         
                             'tab_content'
                             . ($thissection->currentnestedlevel >= $level ? ' marker' : '')
                             . (!$thissection->visible || !$thissection->available
-                               || $level > $thissection->pagedepthdirect ? ' dimmed' : '')
+                               || $level > $thissection->pagedepthdirect ? ' dimmed' : ''),
+                            'style' => $customstyles
                         ]),
                         $sectionname);
                     $newtab->level = $level - FORMAT_MULTITOPIC_SECTION_LEVEL_ROOT;

@@ -714,6 +714,12 @@ class format_multitopic extends format_base {
                     'type' => PARAM_NOTAGS
                 ),
                 // END INCLUDED.
+                // INCLUDED /course/format/onetopic/lib.php function section_format_options 'cssstyles'.
+                'cssstyles' => array(
+                    'default' => '',
+                    'type' => PARAM_RAW
+                )
+                // END INCLUDED.
             );
         }
         if ($foreditform && !isset($sectionformatoptions['level']['label'])) {
@@ -748,6 +754,14 @@ class format_multitopic extends format_base {
                     )),
                     // END ADDED.
                 ),
+                // END INCLUDED.
+                // INCLUDED /course/format/onetopic/lib.php function section_format_options $foreditform 'cssstyles'.
+                'cssstyles' => array(
+                    // REMOVED 'default' and 'type'.
+                    'label' => get_string('cssstyles', 'format_multitopic'),    // CHANGED.
+                    'help' => 'cssstyles',
+                    'help_component' => 'format_multitopic',                    // CHANGED.
+                )
                 // END INCLUDED.
             );
             $sectionformatoptions = array_merge_recursive($sectionformatoptions, $sectionformatoptionsedit); // CHANGED.
