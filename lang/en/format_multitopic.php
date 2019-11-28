@@ -66,7 +66,7 @@ $string['cssstyles_help'] = 'CSS properties for the page\'s tab.<br />e.g. backg
 
 // INCLUDED /course/format/periods/lang/en/format_periods.php $string['perioddurationdefault'] - $string['perioddurationoverride_help'] CHANGED.
 $string['perioddurationdefault'] = 'Topic duration';
-$string['perioddurationoverride'] = 'Override topic duration';
+$string['perioddurationoverride'] = 'Topic duration override';
 $string['perioddurationdefault_help'] = 'Set to "1 week" to have dates shown for topics, similar to the Weekly course format, '
                                       . 'or "Unspecified" otherwise.';
 $string['perioddurationoverride_help'] = 'Whether this topic has time allocated to it or not.  '
