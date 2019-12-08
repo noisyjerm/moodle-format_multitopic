@@ -18,7 +18,7 @@
  * Jumps to a given relative or Moodle absolute URL.
  *
  * CHANGES:
- *  - Only used in the modchooser (classes/core_course_renderer_wrapper.php), for redirecting to appropriate module creation page.
+ *  - Only used in the modchooser (classes/course_renderer_wrapper.php), for redirecting to appropriate module creation page.
  *  - Converts from section ID, used by custom code, to section number, used by original code.
  *
  * @package   format_multitopic
@@ -26,7 +26,6 @@
  * @copyright based on work by 1999 Martin Dougiamas  http://dougiamas.com
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-namespace format_multitopic;
 
 require('../../../config.php');                                                 // CHANGED.
 
@@ -49,9 +48,7 @@ if (strpos($jump, '/') === 0 || strpos($jump, $CFG->wwwroot) === 0) {
     // ADDED: Convert sectionid to section.
     $moodlejump = new \moodle_url($jump);
     $courseid = $moodlejump->get_param('id');
-    $course = $DB->get_record('course', ['id' => $courseid], '*', MUST_EXIST);
     $sectionid = $moodlejump->get_param('sectionid');
-    $sectionnum = $moodlejump->get_param('section');
     if ($sectionid) {
         $sectionnum = $DB->get_field('course_sections', 'section', ['id' => $sectionid, 'course' => $courseid], MUST_EXIST);
         $moodlejump->param('section', $sectionnum);

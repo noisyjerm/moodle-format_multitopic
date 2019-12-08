@@ -514,7 +514,7 @@ class format_multitopic extends format_base {
     public function extend_course_navigation($navigation, navigation_node $node) : void {
         global $PAGE;
 
-        $navigationwrapper = new \format_multitopic\format_multitopic_global_navigation_wrapper($navigation); // ADDED.
+        $navigationwrapper = new \format_multitopic\global_navigation_wrapper($navigation); // ADDED.
 
         // If section is specified in course/view.php, make sure it is expanded in navigation.
         if ($navigation->includesectionnum === false) {
@@ -831,7 +831,7 @@ class format_multitopic extends format_base {
     public function course_header() : ?renderable {
         // REMOVED: Removed empty function body.
         // ADDED.
-        return new \format_multitopic\format_multitopic_courseheader($this->get_course());
+        return new \format_multitopic\courseheader($this->get_course());
         // END ADDED.
     }
     // END INCLUDED.
@@ -846,7 +846,7 @@ class format_multitopic extends format_base {
         global $PAGE;
         // Don't show in manage files popup.  TODO: Better way?
         if (class_exists('format_multitopic_renderer')) {
-            return new \format_multitopic\format_multitopic_coursecontentheaderfooter($PAGE, -1);
+            return new \format_multitopic\coursecontentheaderfooter($PAGE, -1);
         } else {
             return null;
         }
@@ -864,7 +864,7 @@ class format_multitopic extends format_base {
         global $PAGE;
         // Don't show in manage files popup.  TODO: Better way?
         if (class_exists('format_multitopic_renderer')) {
-            return new \format_multitopic\format_multitopic_coursecontentheaderfooter($PAGE, 1);
+            return new \format_multitopic\coursecontentheaderfooter($PAGE, 1);
         } else {
             return null;
         }
@@ -909,7 +909,7 @@ class format_multitopic extends format_base {
     /**
      * Prepares the templateable object to display section name
      *
-     * @param \section_info|\stdClass $section
+     * @param section_info|stdClass $section
      * @param bool $linkifneeded
      * @param bool $editable
      * @param null|lang_string|string $edithint
