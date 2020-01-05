@@ -813,9 +813,10 @@ class format_multitopic_renderer extends format_section_renderer_base {         
                 || $sectionatlevel[$level - 1]->uservisiblesan && $showsection) {   // ADDED.
                 $pageid = ($thissection->levelsan < FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC) ? $thissection->id
                                                                                            : $thissection->parentid;
-                echo $this->section_header($thissection, $course, $thissection->levelsan < FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC);
+
                 if ($thissection->uservisible && $pageid == $displaysection->id) {
                     // CHANGED LINE ABOVE.
+                    echo $this->section_header($thissection, $course, $thissection->levelsan < FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC);
                     // ADDED moved here as per print_single_section_page.
                     if ($thissection->levelsan < FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC) {
                         $completioninfo = new completion_info($course);
@@ -825,8 +826,9 @@ class format_multitopic_renderer extends format_section_renderer_base {         
                     echo $this->courserenderer->course_section_cm_list($course, $thissection); // CHANGED removed section return.
                     echo (new \format_multitopic\course_renderer_wrapper($this->courserenderer)
                          )->course_section_add_cm_control($course, $thissection); // CHANGED removed section return.
+                    echo $this->section_footer();
                 }
-                echo $this->section_footer();
+
             }
 
             // ADDED.

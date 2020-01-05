@@ -54,6 +54,8 @@ M.course.format.swap_sections = function(Y, node1, node2) {
 /* eslint-disable camelcase */
 M.course.format.process_sections = function(Y, sectionlist, response, sectionfrom, sectionto) {
     /* eslint-enable camelcase */
+    var firstIndex = sectionlist.indexOf(Y.one('[id^=section-]')),
+        firstNum = parseInt(sectionlist.item(firstIndex).get("id").match(/section-(\d+)/)[1]);
     var CSS = {
         SECTIONNAME: 'sectionname'
     },
@@ -75,9 +77,9 @@ M.course.format.process_sections = function(Y, sectionlist, response, sectionfro
         for (var i = sectionfrom; i <= sectionto; i++) {
             // Update section title.
             var content = Y.Node.create('<span>' + response.sectiontitles[i] + '</span>');
-            sectionlist.item(i).all('.' + CSS.SECTIONNAME).setHTML(content);
+            sectionlist.item(i - firstNum).all('.' + CSS.SECTIONNAME).setHTML(content);
             // Update move icon.
-            ele = sectionlist.item(i).one(SELECTORS.SECTIONLEFTSIDE);
+            ele = sectionlist.item(i - firstNum).one(SELECTORS.SECTIONLEFTSIDE);
             str = ele.getAttribute('alt');
             stridx = str.lastIndexOf(' ');
             newstr = str.substr(0, stridx + 1) + i;
@@ -85,14 +87,14 @@ M.course.format.process_sections = function(Y, sectionlist, response, sectionfro
             ele.setAttribute('title', newstr); // For FireFox as 'alt' is not refreshed.
 
             // ADDED: Restore collapse icon.
-            if (sectionlist.item(i).hasClass("section-topic-timed")) {
-                M.course.format.fmtCollapseIconYui(sectionlist.item(i));
+            if (sectionlist.item(i - firstNum).hasClass("section-topic-timed")) {
+                M.course.format.fmtCollapseIconYui(sectionlist.item(i - firstNum));
             }
             // END ADDED.
 
             // INCLUDED /course/format/weeks/format.js M.course.format.process_sections part.
             // Remove the current class as section has been moved.
-            sectionlist.item(i).removeClass('current');
+            sectionlist.item(i - firstNum).removeClass('current');
             // END INCLUDED.
 
         }
@@ -100,7 +102,7 @@ M.course.format.process_sections = function(Y, sectionlist, response, sectionfro
         // If there is a current section, apply corresponding class in order to highlight it.
         if (response.current !== -1) {
             // Add current class to the required section.
-            sectionlist.item(response.current).addClass('current');
+            sectionlist.item(response.current - firstNum).addClass('current');
         }
         // END INCLUDED.
     }
