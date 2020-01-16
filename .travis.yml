@@ -26,7 +26,6 @@ cache:
 
 php:
  - 7.0
- - 7.1
  - 7.2
 
 env:
@@ -59,5 +58,4 @@ script:
   - moodle-plugin-ci grunt
   - moodle-plugin-ci phpdoc
   - moodle-plugin-ci phpunit
-  - moodle-plugin-ci behat
   - moodle-plugin-ci behat --profile chrome
