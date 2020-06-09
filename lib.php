@@ -172,7 +172,8 @@ class format_multitopic extends format_base {
             $levelsan = ($sectionatlevel[FORMAT_MULTITOPIC_SECTION_LEVEL_ROOT] == null) ?
                         FORMAT_MULTITOPIC_SECTION_LEVEL_ROOT
                         : max(FORMAT_MULTITOPIC_SECTION_LEVEL_ROOT + 1,
-                          min(isset($thissection->level) ? $thissection->level : FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC, FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC));
+                          min(isset($thissection->level) ? $thissection->level : FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC,
+                            FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC));
             $thissection->levelsan = $levelsan;
 
             // Update remembered sections.
@@ -304,7 +305,7 @@ class format_multitopic extends format_base {
      * @param int $strictness
      * @return section_info
      */
-    public final function fmt_get_section($section, int $strictness = IGNORE_MISSING) {
+    public final function fmt_get_section($section, $strictness = IGNORE_MISSING) {
         // CHANGED: Convert from section number to section info, rather than the other way around.
         if (is_numeric($section)) {
             $sectionnum = $section;
@@ -457,7 +458,8 @@ class format_multitopic extends format_base {
     public function get_view_url($section, $options = array()) {
         global $CFG;
         $course = $this->get_course();
-        $url = new moodle_url( (isset($options['fmtedit']) ? $options['fmtedit'] : false) ? '/course/format/multitopic/_course_view.php'
+        $url = new moodle_url( (isset($options['fmtedit']) ? $options['fmtedit'] : false)
+                                ? '/course/format/multitopic/_course_view.php'
                                 : '/course/view.php', array('id' => $course->id)); // CHANGED.
         // REMOVED section return.
         // REMOVED convert sectioninfo to number.
@@ -1022,7 +1024,7 @@ class format_multitopic extends format_base {
  * @param mixed $newvalue
  * @return \core\output\inplace_editable
  */
-function format_multitopic_inplace_editable(string $itemtype, int $itemid, $newvalue) {
+function format_multitopic_inplace_editable($itemtype, $itemid, $newvalue) {
     // CHANGED LINE ABOVE.
     global $DB, $CFG;
     require_once($CFG->dirroot . '/course/lib.php');

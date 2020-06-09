@@ -77,7 +77,7 @@ class course_renderer_wrapper {
      *     option 'inblock' => true, suggesting to display controls vertically
      * @return string
      */
-    public function course_section_add_cm_control($course, $section, $sectionreturn = null, $displayoptions = array()) : string {
+    public function course_section_add_cm_control($course, $section, $sectionreturn = null, $displayoptions = array()) {
         // CHANGED ABOVE: Specify section info instead of number.
         global $CFG;
 

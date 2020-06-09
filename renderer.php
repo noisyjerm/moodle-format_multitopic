@@ -51,7 +51,7 @@ class format_multitopic_renderer extends format_section_renderer_base {         
      * @param moodle_page $page
      * @param string $target one of rendering target constants
      */
-    public function __construct(moodle_page $page, string $target) {
+    public function __construct(moodle_page $page, $target) {
         parent::__construct($page, $target);
 
         // REMOVED: Marker stuff.
@@ -104,7 +104,7 @@ class format_multitopic_renderer extends format_section_renderer_base {         
      * @param bool $linkifneeded Whether to add link
      * @return string HTML to output.
      */
-    public function section_title($section, $course, bool $linkifneeded = true) {
+    public function section_title($section, $course, $linkifneeded = true) {
         // CHANGED LINE ABOVE.
 
         // ADDED.

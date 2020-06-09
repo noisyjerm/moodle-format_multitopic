@@ -46,7 +46,7 @@ class coursecontentheaderfooter implements \renderable {
      * @param \moodle_page $page The page the header or footer is for
      * @param int $pos -1 for header, 1 for footer
      */
-    public function __construct(\moodle_page $page, int $pos) {
+    public function __construct(\moodle_page $page, $pos) {
         // Based on lib/outputrenderers.php function activity_navigation .
 
         // First we should check if we want to add navigation.

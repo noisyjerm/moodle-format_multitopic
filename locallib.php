@@ -37,7 +37,7 @@ defined('MOODLE_INTERNAL') || die;
  * @param int $visibility The new visibility.  0 = hidden, 1 = visible
  * @return array A list of resources which were hidden in the section
  */
-function format_multitopic_set_section_visible(int $courseid, \stdClass $section, int $visibility) {
+function format_multitopic_set_section_visible($courseid, \stdClass $section, $visibility) {
     // CHANGED LINE ABOVE: Use sectioninfo, not section number.
     global $DB;
 
