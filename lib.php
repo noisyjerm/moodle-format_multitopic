@@ -905,7 +905,7 @@ class format_multitopic extends format_base {
      * @return \core\output\inplace_editable
      */
     public function inplace_editable_render_section_name($section, $linkifneeded = true,
-                                            $editable = null, $edithint = null, $editlabel = null) : \core\output\inplace_editable {
+                                            $editable = null, $edithint = null, $editlabel = null) {
         $section = $this->fmt_get_section($section);                            // ADDED.
         if (empty($edithint)) {
             $edithint = new lang_string('editsectionname');

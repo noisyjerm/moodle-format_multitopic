@@ -487,7 +487,7 @@ class format_multitopic_renderer extends format_section_renderer_base {         
      * @param section_info $section
      * @return string
      */
-    public function section_availability($section) : string {
+    public function section_availability($section) {
         $context = context_course::instance($section->course);
         $canviewhidden = has_capability('moodle/course:viewhiddensections', $context);
 
@@ -860,7 +860,7 @@ class format_multitopic_renderer extends format_section_renderer_base {         
      * @param stdClass $insertsection
      * @return string
      */
-    protected function change_number_sections($course, $sectionreturn = null, stdClass $insertsection = null) : string {
+    protected function change_number_sections($course, $sectionreturn = null, stdClass $insertsection = null) {
         // CHANGED LINE ABOVE.
         $coursecontext = context_course::instance($course->id);
         if (!has_capability('moodle/course:update', $coursecontext)
