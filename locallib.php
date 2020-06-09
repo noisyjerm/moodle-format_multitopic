@@ -37,7 +37,7 @@ defined('MOODLE_INTERNAL') || die;
  * @param int $visibility The new visibility.  0 = hidden, 1 = visible
  * @return array A list of resources which were hidden in the section
  */
-function format_multitopic_set_section_visible(int $courseid, \stdClass $section, int $visibility) : array {
+function format_multitopic_set_section_visible(int $courseid, \stdClass $section, int $visibility) {
     // CHANGED LINE ABOVE: Use sectioninfo, not section number.
     global $DB;
 
@@ -81,7 +81,7 @@ function format_multitopic_set_section_visible(int $courseid, \stdClass $section
  * @param stdClass $section position to insert at.  Must specify parentid.  May specify level.
  * @return stdClass created section object.  Has database properties plus parentid and levelsan.
  */
-function format_multitopic_course_create_section(\stdClass $courseorid, \stdClass $section) : \stdClass {
+function format_multitopic_course_create_section(\stdClass $courseorid, \stdClass $section) {
     // CHANGED LINE ABOVE: Use section info, specifying parentid and level, instead of section number.
     global $DB;
     $courseid = is_object($courseorid) ? $courseorid->id : $courseorid;
@@ -219,7 +219,7 @@ function format_multitopic_move_section_to(\stdClass $course, \stdClass $section
  * @param section_info $section The section to check.  Must specify section (number).  Should specify calculated properties.
  * @return bool
  */
-function format_multitopic_course_can_delete_section(\stdClass $course, \section_info $section) : bool {
+function format_multitopic_course_can_delete_section(\stdClass $course, \section_info $section) {
     // CHANGED LINE ABOVE.
     // REMOVED: extract number from section parameter.
     if (!$section->section) {                                                   // CHANGED: Check inside section info.
@@ -257,7 +257,7 @@ function format_multitopic_course_can_delete_section(\stdClass $course, \section
  * @param stdClass $target The destination.  Must specify parentid, prevupid, or nextupid.  May specify level.
  * @return array
  */
-function format_multitopic_reorder_sections(array $sections, \stdClass $origin, \stdClass $target) : array {
+function format_multitopic_reorder_sections(array $sections, \stdClass $origin, \stdClass $target) {
     // CHANGED THROUGHOUT: Section numbers changed to IDs, used exceptions instead of returning false.
     // Reads Calculated section values (levelsan, visiblesan).
     // Writes raw section values (level, visible).
@@ -285,7 +285,7 @@ function format_multitopic_reorder_sections(array $sections, \stdClass $origin, 
     }
 
     // Find target position and extract remaining sections.
-    $target->level = $target->level ?? $origin->levelsan;
+    $target->level = isset($target->level) ? $target->level : $origin->levelsan;
     $parent = null;
     $prev = null;
     $found = false;
@@ -394,7 +394,7 @@ function format_multitopic_reorder_sections(array $sections, \stdClass $origin, 
  * @param string|null $licencecode
  * @return string
  */
-function format_multitopic_image_attribution($imagename, $authorwithurl, $licencecode) : string {
+function format_multitopic_image_attribution($imagename, $authorwithurl, $licencecode) {
     $o = '';
     $authorwithurlarray = explode('|', $authorwithurl);
     $authorhtml         = $authorwithurlarray[0];

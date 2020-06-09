@@ -90,7 +90,7 @@ class courseheader implements \renderable {
      *
      * @return string generated HTML.
      */
-    public function output(): string {
+    public function output() {
 
         // Output the banner.
         // NOTE: Changes here need to be reflected in _course_edit.js .

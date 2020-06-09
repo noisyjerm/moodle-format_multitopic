@@ -68,7 +68,7 @@ class coursecontentheaderfooter implements \renderable {
      *
      * @return string generated HTML.
      */
-    public function output(): string {
+    public function output() {
 
         global $OUTPUT;
         $o = '';

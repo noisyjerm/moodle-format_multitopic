@@ -75,7 +75,7 @@ class format_multitopic_renderer extends format_section_renderer_base {         
      * Generate the starting container html for a list of sections
      * @return string HTML to output.
      */
-    protected function start_section_list() : string {
+    protected function start_section_list() {
         return html_writer::start_tag('ul', array('class' => 'sections'));
     }
 
@@ -83,7 +83,7 @@ class format_multitopic_renderer extends format_section_renderer_base {         
      * Generate the closing container html for a list of sections
      * @return string HTML to output.
      */
-    protected function end_section_list() : string {
+    protected function end_section_list() {
         return html_writer::end_tag('ul');
     }
 
@@ -91,7 +91,7 @@ class format_multitopic_renderer extends format_section_renderer_base {         
      * Generate the title for this section page
      * @return string the page title
      */
-    protected function page_title() : string {
+    protected function page_title() {
         return get_string_manager()->string_exists('sectionoutline', 'format_multitopic') ?
                 get_string('sectionoutline', 'format_multitopic') : get_string('topicoutline'); // CHANGED.
     }
@@ -104,7 +104,7 @@ class format_multitopic_renderer extends format_section_renderer_base {         
      * @param bool $linkifneeded Whether to add link
      * @return string HTML to output.
      */
-    public function section_title($section, $course, bool $linkifneeded = true) : string {
+    public function section_title($section, $course, bool $linkifneeded = true) {
         // CHANGED LINE ABOVE.
 
         // ADDED.
@@ -139,7 +139,7 @@ class format_multitopic_renderer extends format_section_renderer_base {         
      * @param stdClass $course The course entry from DB
      * @return string HTML to output.
      */
-    public function section_title_without_link($section, $course) : string {
+    public function section_title_without_link($section, $course) {
         return $this->section_title($section, $course, false);                  // CHANGED.
     }
 
@@ -156,7 +156,7 @@ class format_multitopic_renderer extends format_section_renderer_base {         
      * @param int $sectionreturn The section to return to after an action, unused
      * @return string HTML to output.
      */
-    protected function section_header($section, $course, $onsectionpage, $sectionreturn=null) : string {
+    protected function section_header($section, $course, $onsectionpage, $sectionreturn=null) {
         // REMOVED: unused global $PAGE.
 
         $section = course_get_format($course)->fmt_get_section($section);
@@ -239,7 +239,7 @@ class format_multitopic_renderer extends format_section_renderer_base {         
      * @param bool $onsectionpage true if being printed on a section page
      * @return array of edit control items
      */
-    protected function section_edit_control_items($course, $section, $onsectionpage = false) : array {
+    protected function section_edit_control_items($course, $section, $onsectionpage = false) {
         global $PAGE;
 
         if (!$PAGE->user_is_editing()) {
@@ -503,7 +503,7 @@ class format_multitopic_renderer extends format_section_renderer_base {         
      * @param section_info $section The section in the course which is being displayed.  Must specify id and section (number).
      * @return string HTML to output.
      */
-    protected function fmt_course_activity_clipboard(stdClass $course, section_info $section) : string {
+    protected function fmt_course_activity_clipboard(stdClass $course, section_info $section) {
         global $USER, $PAGE;                                                    // CHANGED: Added $PAGE.
 
         if (!$PAGE->user_is_editing() && !ismoving($course->id)) {
@@ -521,7 +521,7 @@ class format_multitopic_renderer extends format_section_renderer_base {         
             $url = course_get_url($course, $section, ['fmtedit' => true]);
             $url->param('sesskey', sesskey());
 
-            if ($USER->onetopic_da[$course->id] ?? false) {
+            if (isset($USER->onetopic_da[$course->id]) ? $USER->onetopic_da[$course->id] : false) {
                 $disableajax = true;
                 $url->param('onetopic_da', 0);
                 $buttontext = get_string_manager()->string_exists('activityclipboard_disable', 'format_multitopic') ?
@@ -609,7 +609,7 @@ class format_multitopic_renderer extends format_section_renderer_base {         
 
         // Find display section.
         if (is_object($displaysection) && isset($displaysection->id)) {
-            $displaysection = $sections[$displaysection->id] ?? null;
+            $displaysection = isset($sections[$displaysection->id]) ? $sections[$displaysection->id] : null;
         } else if (is_numeric($displaysection) || isset($displaysection->section)) {
             $displaysectionnum = is_numeric($displaysection) ? $displaysection : $displaysection->section;
             $displaysection = null;
@@ -909,7 +909,7 @@ class format_multitopic_renderer extends format_section_renderer_base {         
      * @param stdClass $section The course_section entry from DB
      * @return string HTML to output.
      */
-    protected function format_summary_text($section) : string {
+    protected function format_summary_text($section) {
         $context = context_course::instance($section->course);
 
         // ADDED.
@@ -965,7 +965,7 @@ class format_multitopic_renderer extends format_section_renderer_base {         
      * @param \format_multitopic\courseheader $header header to render
      * @return string HTML to output.
      */
-    protected function render_courseheader(\format_multitopic\courseheader $header) : string {
+    protected function render_courseheader(\format_multitopic\courseheader $header) {
 
         global $PAGE;
 
@@ -984,7 +984,7 @@ class format_multitopic_renderer extends format_section_renderer_base {         
      * @return string HTML to output.
      */
     protected function render_coursecontentheaderfooter(
-                            \format_multitopic\coursecontentheaderfooter $headerfooter) : string {
+                            \format_multitopic\coursecontentheaderfooter $headerfooter) {
         return $headerfooter->output();
     }
     // END ADDED.
