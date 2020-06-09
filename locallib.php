@@ -122,7 +122,7 @@ function format_multitopic_course_create_section(\stdClass $courseorid, \stdClas
         $cw->section = (int)$DB->get_field_sql('SELECT section from {course_sections} WHERE course = ? AND id = ?',
                                                 [$courseid, $cw->id]);          // CHANGED.
         $cw->parentid = $section->parentid;                                     // ADDED.
-        $cw->levelsan = $section->level ?? FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC; // ADDED.
+        $cw->levelsan = isset($section->level) ? $section->level : FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC; // ADDED.
     }
 
     \core\event\course_section_created::create_from_section($cw)->trigger();

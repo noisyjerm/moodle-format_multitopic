@@ -457,7 +457,7 @@ class format_multitopic extends format_base {
     public function get_view_url($section, $options = array()) {
         global $CFG;
         $course = $this->get_course();
-        $url = new moodle_url( ($options['fmtedit'] ?? false) ? '/course/format/multitopic/_course_view.php'
+        $url = new moodle_url( (isset($options['fmtedit']) ? $options['fmtedit'] : false) ? '/course/format/multitopic/_course_view.php'
                                 : '/course/view.php', array('id' => $course->id)); // CHANGED.
         // REMOVED section return.
         // REMOVED convert sectioninfo to number.
