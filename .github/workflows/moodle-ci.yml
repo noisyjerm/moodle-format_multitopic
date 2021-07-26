@@ -31,49 +31,49 @@ jobs:
       matrix:
         include:
           # Moodle 3.4 (old) version.php $plugin -> requires = 2017111300
-          #- php: '7.0' # 7.0-7.2
-          #  moodle-branch: 'MOODLE_34_STABLE'
-          #  database: mariadb
-          # Moodle 3.5
           - php: '7.0' # 7.0-7.2
-            moodle-branch: 'MOODLE_35_STABLE'
+            moodle-branch: 'MOODLE_34_STABLE'
             database: mariadb
+          # Moodle 3.5
+          #- php: '7.0' # 7.0-7.2
+          #  moodle-branch: 'MOODLE_35_STABLE'
+          #  database: mariadb
           # Moodle 3.6
-          - php: '7.0' # 7.0-7.3
-            moodle-branch: 'MOODLE_36_STABLE'
-            database: mariadb
+          #- php: '7.0' # 7.0-7.3
+          #  moodle-branch: 'MOODLE_36_STABLE'
+          #  database: mariadb
           # Moodle 3.7
-          - php: '7.1' # 7.1-7.3
-            moodle-branch: 'MOODLE_37_STABLE'
-            database: mariadb
+          #- php: '7.1' # 7.1-7.3
+          #  moodle-branch: 'MOODLE_37_STABLE'
+          #  database: mariadb
           # Moodle 3.8
-          - php: '7.1' # 7.1-7.4
-            moodle-branch: 'MOODLE_38_STABLE'
-            database: mariadb
+          #- php: '7.1' # 7.1-7.4
+          #  moodle-branch: 'MOODLE_38_STABLE'
+          #  database: mariadb
           # Moodle 3.9
-          - php: '7.2' # 7.2-7.4
-            moodle-branch: 'MOODLE_39_STABLE'
-            database: mariadb
+          #- php: '7.2' # 7.2-7.4
+          #  moodle-branch: 'MOODLE_39_STABLE'
+          #  database: mariadb
           # Moodle 3.9, PostgreSQL
-          - php: '7.2' # 7.2-7.4
-            moodle-branch: 'MOODLE_39_STABLE'
-            database: pgsql
+          #- php: '7.2' # 7.2-7.4
+          #  moodle-branch: 'MOODLE_39_STABLE'
+          #  database: pgsql
           # Moodle 3.10
-          - php: '7.3' # 7.2-7.4
-            moodle-branch: 'MOODLE_310_STABLE'
-            database: mariadb
+          #- php: '7.3' # 7.2-7.4
+          #  moodle-branch: 'MOODLE_310_STABLE'
+          #  database: mariadb
           # Moodle 3.11
-          - php: '7.4' # 7.2-7.4
-            moodle-branch: 'MOODLE_311_STABLE'
-            database: mariadb
+          #- php: '7.4' # 7.2-7.4
+          #  moodle-branch: 'MOODLE_311_STABLE'
+          #  database: mariadb
           # Moodle 3.11, PostgreSQL
-          - php: '7.4' # 7.2-7.4
-            moodle-branch: 'MOODLE_311_STABLE'
-            database: pgsql
+          #- php: '7.4' # 7.2-7.4
+          #  moodle-branch: 'MOODLE_311_STABLE'
+          #  database: pgsql
           # Moodle 3.11, PHP 8.0 (not ready for production)
-          - php: '8.0' # 7.2-7.4
-            moodle-branch: 'MOODLE_311_STABLE'
-            database: mariadb
+          #- php: '8.0' # 7.2-7.4
+          #  moodle-branch: 'MOODLE_311_STABLE'
+          #  database: mariadb
 
     steps:
       - name: Check out repository code
