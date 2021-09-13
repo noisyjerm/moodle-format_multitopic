@@ -34,7 +34,8 @@ require_once($CFG->libdir . '/completionlib.php');
 
 $context = \context_course::instance($course->id);
 // Retrieve course format option fields and add them to the $course object.
-$course = course_get_format($course)->get_course();
+$format = course_get_format($course);
+$course = $format->get_course();
 
 // REMOVED set course marker.
 
@@ -43,11 +44,18 @@ course_create_sections_if_missing($course, 0);
 
 $renderer = $PAGE->get_renderer('format_multitopic');
 
-if (false) {                                                                    // CHANGED: Always use multi-section page.
-    $renderer->print_single_section_page($course, null, null, null, null, $displaysection);
+if ($sectionid) {
+    $displaysectionid = $sectionid;
 } else {
-    $renderer->print_multiple_section_page($course, null, null, null, null, $displaysection); // CHANGED: Pass display section.
+    $displaysectionid = $DB->get_record('course_sections',
+                            array('section' => $section, 'course' => $course->id), '*', MUST_EXIST)->id;
 }
+if (!empty($displaysectionid)) {
+    $format->set_section_id($displaysectionid);
+}
+$outputclass = $format->get_output_classname('content');
+$widget = new $outputclass($format);
+echo $renderer->render($widget);
 
 // Include course format js module.
 $PAGE->requires->js('/course/format/multitopic/format.js');
