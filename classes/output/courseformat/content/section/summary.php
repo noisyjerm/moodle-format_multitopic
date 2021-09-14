@@ -42,8 +42,8 @@ class summary extends summary_base {
     /**
      * Constructor.
      *
-     * @param course_format $format the course format
-     * @param section_info $section the section info
+     * @param \format_multitopic $format the course format
+     * @param \section_info $section the section info
      */
     public function __construct(\format_multitopic $format, \section_info $section) {
         parent::__construct($format, $section);

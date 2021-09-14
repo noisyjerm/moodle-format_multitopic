@@ -17,7 +17,7 @@
 /**
  * Contains the default section course format output class.
  *
- * @package   core_courseformat
+ * @package   format_multitopic
  * @copyright 2020 Ferran Recio <ferran@moodle.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -29,7 +29,7 @@ use core_courseformat\output\local\content\addsection as addsection_base;
 /**
  * Base class to render a course add section buttons.
  *
- * @package   core_courseformat
+ * @package   format_multitopic
  * @copyright 2020 Ferran Recio <ferran@moodle.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -70,7 +70,7 @@ class addsection extends addsection_base {
             }
 
             $params = ['courseid' => $course->id,
-                'insertparentid' => $format->fmt_get_sections()[$format->singlesectionid]->id,
+                'insertparentid' => $format->fmt_get_sections()[$format->singlesectionid]->id,  // TODO: Store
                 'insertlevel' => FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC,
                 'sesskey' => sesskey()];
 

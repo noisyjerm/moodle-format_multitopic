@@ -17,7 +17,7 @@
 /**
  * Contains the default section course format output class.
  *
- * @package   core_courseformat
+ * @package   format_multitopic
  * @copyright 2020 Ferran Recio <ferran@moodle.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -29,7 +29,7 @@ use core_courseformat\output\local\content\section as section_base;
 /**
  * Base class to render a course section.
  *
- * @package   core_courseformat
+ * @package   format_multitopic
  * @copyright 2020 Ferran Recio <ferran@moodle.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -72,7 +72,7 @@ class section extends section_base {
         $data = (object)[
             'num' => $thissection->section ?? '0',
             'id' => $thissection->id,
-            'sectionreturnid' => $singlesection,
+            'sectionreturnid' => $thissection->section,
             'summary' => $summary->export_for_template($output),
             'availability' => $availability->export_for_template($output),
             'fmtonpage' => $singlesection <= $thissection->section
@@ -99,7 +99,7 @@ class section extends section_base {
                 $controlmenu = new $this->controlmenuclass($format, $thissection);
                 $data->controlmenu = $controlmenu->export_for_template($output);
             }
-                $data->cmcontrols = $output->course_section_add_cm_control($course, $thissection->section, $singlesection);
+                $data->cmcontrols = $output->course_section_add_cm_control($course, $thissection->section);
         }
 
         // When a section is displayed alone the title goes over the section, not inside it.

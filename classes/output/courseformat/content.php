@@ -17,7 +17,7 @@
 /**
  * Contains the main course format out class.
  *
- * @package   core_courseformat
+ * @package   format_multitopic
  * @copyright 2020 Ferran Recio <ferran@moodle.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -29,7 +29,7 @@ use core_courseformat\output\local\content as content_base;
 /**
  * Base class to render a course format.
  *
- * @package   core_courseformat
+ * @package   format_multitopic
  * @copyright 2020 Ferran Recio <ferran@moodle.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -38,7 +38,7 @@ class content extends content_base {
     /**
      * Constructor.
      *
-     * @param course_format $format the coruse format
+     * @param \format_multitopic $format the coruse format
      */
     public function __construct(\format_multitopic $format) {
         $this->format = $format;
@@ -61,7 +61,7 @@ class content extends content_base {
         $format = $this->format;
         $course = $format->get_course();
 
-        $sections = $this->format->fmt_get_sections();
+        $sections = $this->format->fmt_get_sections();  // *** TODO: Store
         $displaysection = $sections[$this->format->singlesectionid];
         $user = $USER;
 
@@ -288,7 +288,7 @@ class content extends content_base {
             // The course/view.php check the section existence but the output can be called
             // from other parts so we need to check it.
             if (!$thissection) {
-                throw new moodle_exception('unknowncoursesection', 'error', course_get_url($course),
+                throw new \moodle_exception('unknowncoursesection', 'error', course_get_url($course),
                     format_string($course->fullname));
             }
 
@@ -333,7 +333,7 @@ class content extends content_base {
      * @return section_info[] an array of section_info to display
      */
     private function get_sections_to_display(\course_modinfo $modinfo): array {
-        return $this->format->fmt_get_sections();
+        return $this->format->fmt_get_sections();  // TODO: Store.
     }
 
 }

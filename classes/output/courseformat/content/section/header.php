@@ -17,7 +17,7 @@
 /**
  * Contains the default section header format output class.
  *
- * @package   core_courseformat
+ * @package   format_multitopic
  * @copyright 2019 onwards James Calder and Otago Polytechnic
  *            based on work by 2020 Ferran Recio <ferran@moodle.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -26,13 +26,14 @@
 namespace format_multitopic\output\courseformat\content\section;
 
 require_once(__DIR__.'/../../../../../../../../config.php');
+require_login();
 
 use core_courseformat\output\local\content\section\header as header_base;
 
 /**
  * Base class to render a section header.
  *
- * @package   core_courseformat
+ * @package   format_multitopic
  * @copyright 2019 onwards James Calder and Otago Polytechnic
  *            based on work by 2020 Ferran Recio <ferran@moodle.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later

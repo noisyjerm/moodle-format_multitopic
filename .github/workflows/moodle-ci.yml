@@ -30,13 +30,13 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # Moodle 4.0
+          # Moodle master
           - php: '7.3' # 7.3-7.4
-            moodle-branch: 'MOODLE_40_STABLE'
+            moodle-branch: 'master'
             database: mariadb
-          # Moodle 4.0, PostgreSQL
+          # Moodle master, PostgreSQL
           - php: '7.4' # 7.3-7.4
-            moodle-branch: 'MOODLE_40_STABLE'
+            moodle-branch: 'master'
             database: pgsql
           # Moodle master, PHP 8.0 (not ready for production, see MDL-70745)
           - php: '8.0' # 7.3-7.4

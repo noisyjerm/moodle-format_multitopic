@@ -167,97 +167,6 @@ class renderer extends \core_courseformat\output\section_renderer {         // C
 
     // NOTE: Additional $section data passes through function section_right_content.
 
-    // INCLUDED course/format/renderer.php function section_header .
-    /**
-     * Generate the display of the header part of a section before
-     * course modules are included.
-     *
-     * @param stdClass $section The course_section entry from DB
-     * @param stdClass $course The course entry from DB
-     * @param bool $onsectionpage true if being printed on a single-section page
-     * @param int $sectionreturn The section to return to after an action, unused
-     * @return string HTML to output.
-     */
-    protected function section_header($section, $course, $onsectionpage, $sectionreturn=null) : string {
-
-        $section = course_get_format($course)->fmt_get_section($section);       // ADDED.
-
-        $o = '';
-        // REMOVED: unused local $currenttext.
-        $sectionstyle = '';
-
-        if ($section->section != 0) {
-            // Only in the non-general sections.
-            if (!$section->visible) {
-                $sectionstyle .= ' hidden';
-            }
-            if (course_get_format($course)->is_section_current($section)) {
-                $sectionstyle .= ' current';
-            }
-            // ADDED. TODO: Remove this?
-            if (!$section->uservisible) {
-                $sectionstyle .= ' section-userhidden';
-            }
-            // END ADDED.
-        }
-
-        // ADDED.
-        // Determine the section type.
-        if ($section->levelsan < FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC) {
-            $sectionstyle .= ' section-page';
-        } else if (format_multitopic_duration_as_days($section->periodduration) === 0) {
-            $sectionstyle .= ' section-topic section-topic-untimed';
-        } else {
-            $sectionstyle .= ' section-topic section-topic-timed section-collapsed';
-        }
-
-        $sectionstyle .= " sectionid-{$section->id}";
-        // END ADDED.
-
-        $o .= \html_writer::start_tag('li', [
-            'id' => 'section-' . $section->section,
-            'class' => 'section main clearfix' . $sectionstyle,
-            'role' => 'region',
-            'aria-labelledby' => "sectionid-{$section->id}-title",
-            'aria-label' => get_section_name($course, $section),                // For Sharing Cart.
-            'data-sectionid' => $section->section,
-            'data-sectionreturnid' => $section->section                         // CHANGED.
-        ]);
-
-        // Create a span that contains the section title to be used to create the keyboard section move menu.
-        $o .= \html_writer::tag('span', get_section_name($course, $section), array('class' => 'hidden sectionname'));
-        // TODO: Remove above line?  MDL-68189.
-
-        $leftcontent = $this->section_left_content($section, $course, $onsectionpage);
-        $o .= \html_writer::tag('div', $leftcontent, array('class' => 'left side'));
-
-        $rightcontent = $this->section_right_content($section, $course, $onsectionpage);
-        $o .= \html_writer::tag('div', $rightcontent, array('class' => 'right side'));
-        $o .= \html_writer::start_tag('div', array('class' => 'content'));
-
-        // REMOVED: section title display rules.  Always display the section title.
-        if (true) {
-            $classes = '';
-        }
-
-        $sectionname = \html_writer::tag('span', $this->section_title($section, $course));
-        $o .= $this->output->heading($sectionname, 3, 'sectionname' . $classes, "sectionid-{$section->id}-title");
-
-        $o .= $this->section_availability($section);
-
-        $o .= \html_writer::start_tag('div', array('class' => 'summary'));
-        if ($section->uservisible || $section->visible) {
-            // Show summary if section is available or has availability restriction information.
-            // Do not show summary if section is hidden but we still display it because of course setting
-            // "Hidden sections are shown in collapsed form".
-            $o .= $this->format_summary_text($section);
-        }
-        $o .= \html_writer::end_tag('div');
-
-        return $o;
-    }
-    // END INCLUDED.
-
     // INCLUDED instead /course/format/renderer.php function section_edit_control_items .
     /**
      * Generate the edit control items of a section.
@@ -507,21 +416,6 @@ class renderer extends \core_courseformat\output\section_renderer {         // C
         }
 
         return $controls;
-    }
-    // END INCLUDED.
-
-    // INCLUDED /course/format/renderer.php function section_availability .
-    // TODO: Remove?
-    /**
-     * Displays availability information for the section (hidden, not available unless, etc.)
-     *
-     * @param section_info $section
-     * @return string
-     */
-    public function section_availability($section) : string {
-        $context = \context_course::instance($section->course);
-        $canviewhidden = has_capability('moodle/course:viewhiddensections', $context);
-        return \html_writer::div($this->section_availability_message($section, $canviewhidden), 'section_availability'); // CHANGED.
     }
     // END INCLUDED.
 
