@@ -61,7 +61,8 @@ class content extends content_base {
         $format = $this->format;
         $course = $format->get_course();
 
-        $sections = $this->format->fmt_get_sections();  // *** TODO: Store
+        $sections = $this->format->fmt_get_sections();
+        $this->fmtsections = $sections;
         $displaysection = $sections[$this->format->singlesectionid];
         $user = $USER;
 
@@ -333,7 +334,7 @@ class content extends content_base {
      * @return section_info[] an array of section_info to display
      */
     private function get_sections_to_display(\course_modinfo $modinfo): array {
-        return $this->format->fmt_get_sections();  // TODO: Store.
+        return $this->fmtsections;
     }
 
 }

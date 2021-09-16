@@ -45,13 +45,14 @@ course_create_sections_if_missing($course, 0);
 $renderer = $PAGE->get_renderer('format_multitopic');
 
 if ($sectionid) {
-    $displaysectionid = $sectionid;
+    $displaysection = $DB->get_record('course_sections',
+                            array('id' => $sectionid, 'course' => $course->id), '*', MUST_EXIST);
 } else {
-    $displaysectionid = $DB->get_record('course_sections',
-                            array('section' => $section, 'course' => $course->id), '*', MUST_EXIST)->id;
+    $displaysection = $DB->get_record('course_sections',
+                            array('section' => $section, 'course' => $course->id), '*', MUST_EXIST);
 }
-if (!empty($displaysectionid)) {
-    $format->set_section_id($displaysectionid);
+if (!empty($displaysection)) {
+    $format->set_section($displaysection);
 }
 $outputclass = $format->get_output_classname('content');
 $widget = new $outputclass($format);

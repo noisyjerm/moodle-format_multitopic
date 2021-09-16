@@ -70,7 +70,7 @@ class addsection extends addsection_base {
             }
 
             $params = ['courseid' => $course->id,
-                'insertparentid' => $format->fmt_get_sections()[$format->singlesectionid]->id,  // TODO: Store
+                'insertparentid' => $format->singlesectionid,
                 'insertlevel' => FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC,
                 'sesskey' => sesskey()];
 

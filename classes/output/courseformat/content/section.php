@@ -64,10 +64,11 @@ class section extends section_base {
         $format = $this->format;
         $course = $format->get_course();
         $thissection = $this->thissection;
-        $singlesection = $format->get_section_number();
 
         $summary = new $this->summaryclass($format, $thissection);
         $availability = new $this->availabilityclass($format, $thissection);
+        $pageid = ($thissection->levelsan < FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC) ? $thissection->id
+                                                                                           : $thissection->parentid;
 
         $data = (object)[
             'num' => $thissection->section ?? '0',
@@ -75,8 +76,7 @@ class section extends section_base {
             'sectionreturnid' => $thissection->section,
             'summary' => $summary->export_for_template($output),
             'availability' => $availability->export_for_template($output),
-            'fmtonpage' => $singlesection <= $thissection->section
-                            && $thissection->section <= $format->fmtlastsectionnum,
+            'fmtonpage' => $pageid == $format->singlesectionid,
         ];
 
         // ADDED.

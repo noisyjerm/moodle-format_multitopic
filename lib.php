@@ -449,15 +449,14 @@ class format_multitopic extends core_courseformat\base {
     /**
      * Set which section page will be shown.
      *
-     * @param int $singlesectionid section id
+     * @param int|stdClass $singlesection section or num
      */
-    public function set_section_id(int $singlesectionid): void {
-        $this->singlesectionid = $singlesectionid;
-        $sections = $this->fmt_get_sections();  // *** TODO: Store.
-        $this->singlesection = $sections[$singlesectionid]->section;
-        $this->fmtlastsectionnum = $sections[$singlesectionid]->nextpageid ?
-                                    $sections[$sections[$singlesectionid]->nextpageid]->section - 1
-                                    : count($sections) - 1;
+    public function set_section($singlesection): void {
+        if (!is_object($singlesection)) {
+            $singlesection = $this->get_section($singlesection);
+        }
+        $this->singlesectionid = $singlesection->id;
+        $this->singlesection = $singlesection->section;
     }
 
     /**
