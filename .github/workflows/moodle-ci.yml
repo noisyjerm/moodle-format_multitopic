@@ -35,13 +35,13 @@ jobs:
             moodle-branch: 'master'
             database: mariadb
           # Moodle master, PostgreSQL
-          - php: '7.4' # 7.3-7.4
-            moodle-branch: 'master'
-            database: pgsql
+          #- php: '7.4' # 7.3-7.4
+          #  moodle-branch: 'master'
+          #  database: pgsql
           # Moodle master, PHP 8.0 (not ready for production, see MDL-70745)
-          - php: '8.0' # 7.3-7.4
-            moodle-branch: 'master'
-            database: mariadb
+          #- php: '8.0' # 7.3-7.4
+          #  moodle-branch: 'master'
+          #  database: mariadb
 
     steps:
       - name: Check out repository code
