@@ -77,13 +77,13 @@
         class="section main {{#onlysummary}} section-summary {{/onlysummary}} clearfix
               {{#ishidden}} hidden {{/ishidden}} {{#iscurrent}} current {{/iscurrent}}
               {{fmtclasses}}"
-        role="region"
+        {{^testing}}role="region"{{/testing}}
         aria-labelledby="sectionid-{{id}}-title"
         data-sectionid="{{num}}"
         data-sectionreturnid="{{sectionreturnid}}"
         {{^fmtonpage}}style="display: none;"{{/fmtonpage}}
         >
-    {{#singleheader}} {{> core_courseformat/local/content/section/header }} {{/singleheader}}
+    {{#singleheader}} {{> format_multitopic/courseformat/content/section/header }} {{/singleheader}}
     <div class="left side">{{#iscurrent}} {{{currentlink}}} {{/iscurrent}}</div>
     <div class="right side">
     {{#controlmenu}}
