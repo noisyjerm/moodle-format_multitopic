@@ -26,8 +26,8 @@
 
         "header": {
             "name": "Section title",
-            "url": "#"
-
+            "url": "#",
+            "ishidden": true
         },
         "cmlist": {
             "cms": [
@@ -56,15 +56,22 @@
             ],
             "hascms": true
         },
-
+        "ishidden": false,
         "iscurrent": true,
-
-
+        "currentlink": "<span class=\"accesshide\">This topic</span>",
+        "availability": {
+            "info": "<span class=\"badge badge-info\">Hidden from students</span>",
+            "hasavailability": true
+        },
         "summary": {
             "summarytext": "Summary text!"
-        }
-    }
+        },
+
+        "cmcontrols": "[Add an activity or resource]"
+    },
+    "testing": true
 }}
+{{#testing}}<ul>{{/testing}}
 <li id="section-{{num}}"
         class="section main {{#onlysummary}} section-summary {{/onlysummary}} clearfix
               {{#ishidden}} hidden {{/ishidden}} {{#iscurrent}} current {{/iscurrent}}
@@ -97,3 +104,4 @@
         {{{cmcontrols}}}
     </div>
 </li>
+{{#testing}}</ul>{{/testing}}
