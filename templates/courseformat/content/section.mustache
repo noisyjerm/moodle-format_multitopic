@@ -67,11 +67,11 @@
             "summarytext": "Summary text!"
         },
 
-        "cmcontrols": "[Add an activity or resource]"
-    },
-    "testing": true
+        "cmcontrols": "[Add an activity or resource]",
+        "testingsection": true
+    }
 }}
-{{#testing}}<ul>{{/testing}}
+{{#testingsection}}<ul>{{/testingsection}}
 <li id="section-{{num}}"
         class="section main {{#onlysummary}} section-summary {{/onlysummary}} clearfix
               {{#ishidden}} hidden {{/ishidden}} {{#iscurrent}} current {{/iscurrent}}
@@ -104,4 +104,4 @@
         {{{cmcontrols}}}
     </div>
 </li>
-{{#testing}}</ul>{{/testing}}
+{{#testingsection}}</ul>{{/testingsection}}
