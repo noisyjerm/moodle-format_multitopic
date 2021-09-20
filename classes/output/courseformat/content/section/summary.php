@@ -18,7 +18,9 @@
  * Contains the default section summary (used for multipage format).
  *
  * @package   format_multitopic
- * @copyright 2020 Ferran Recio <ferran@moodle.com>
+ * @copyright 2019 onwards James Calder and Otago Polytechnic
+ * @copyright based on work by 2012 Dan Poltawski
+ * @copyright based on work by 2020 Ferran Recio <ferran@moodle.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -31,7 +33,9 @@ use core_courseformat\output\local\content\section\summary as summary_base;
  * Base class to render a course section summary.
  *
  * @package   format_multitopic
- * @copyright 2020 Ferran Recio <ferran@moodle.com>
+ * @copyright 2019 onwards James Calder and Otago Polytechnic
+ * @copyright based on work by 2012 Dan Poltawski
+ * @copyright based on work by 2020 Ferran Recio <ferran@moodle.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class summary extends summary_base {

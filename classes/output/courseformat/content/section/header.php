@@ -19,7 +19,7 @@
  *
  * @package   format_multitopic
  * @copyright 2019 onwards James Calder and Otago Polytechnic
- *            based on work by 2020 Ferran Recio <ferran@moodle.com>
+ * @copyright based on work by 2020 Ferran Recio <ferran@moodle.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -35,7 +35,7 @@ use core_courseformat\output\local\content\section\header as header_base;
  *
  * @package   format_multitopic
  * @copyright 2019 onwards James Calder and Otago Polytechnic
- *            based on work by 2020 Ferran Recio <ferran@moodle.com>
+ * @copyright based on work by 2020 Ferran Recio <ferran@moodle.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class header extends header_base {

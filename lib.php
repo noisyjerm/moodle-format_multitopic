@@ -19,10 +19,10 @@
  *
  * @since     Moodle 2.0
  * @package   format_multitopic
- * @copyright 2019 James Calder and Otago Polytechnic
+ * @copyright 2019 onwards James Calder and Otago Polytechnic
  * @copyright based on work by 2009 Sam Hemelryk,
- *            2012 David Herney Bernal - cirano,
- *            2014 Marina Glancy
+ * @copyright based on work by 2012 David Herney Bernal - cirano,
+ * @copyright based on work by 2014 Marina Glancy
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -57,8 +57,10 @@ const FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC   = 2;
  * Main class for the Multitopic course format.
  *
  * @package   format_multitopic
- * @copyright 2019 James Calder and Otago Polytechnic
- * @copyright based on work by 2012 Marina Glancy
+ * @copyright 2019 onwards James Calder and Otago Polytechnic
+ * @copyright based on work by 2009 Sam Hemelryk,
+ * @copyright based on work by 2012 David Herney Bernal - cirano,
+ * @copyright based on work by 2014 Marina Glancy
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class format_multitopic extends core_courseformat\base {
@@ -452,9 +454,17 @@ class format_multitopic extends core_courseformat\base {
      * @param int|stdClass $singlesection section or num
      */
     public function set_section($singlesection): void {
-        if (!is_object($singlesection)) {
-            $singlesection = $this->get_section($singlesection);
+        $singlesection = $this->get_section($singlesection);
+
+        // If display section is a topic, get the page it is on instead.
+        if (isset($singlesection) && $singlesection->level >= FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC) {
+            $sections = $this->fmt_get_sections();
+            $singlesection = $sections[$singlesection->id];
+            if (isset($singlesection) && $singlesection->levelsan >= FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC) {
+                $singlesection = $sections[$singlesection->parentid];
+            }
         }
+
         $this->singlesectionid = $singlesection->id;
         $this->singlesection = $singlesection->section;
     }

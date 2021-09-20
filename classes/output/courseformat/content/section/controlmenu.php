@@ -19,8 +19,8 @@
  *
  * @package   format_multitopic
  * @copyright 2019 onwards James Calder and Otago Polytechnic
- *            based on work by 2012 Dan Poltawski
- *            2020 Ferran Recio <ferran@moodle.com>
+ * @copyright based on work by 2012 Dan Poltawski
+ * @copyright based on work by 2020 Ferran Recio <ferran@moodle.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -34,8 +34,8 @@ use core_courseformat\output\local\content\section\controlmenu as controlmenu_ba
  *
  * @package   format_multitopic
  * @copyright 2019 onwards James Calder and Otago Polytechnic
- *            based on work by 2012 Dan Poltawski
- *            2020 Ferran Recio <ferran@moodle.com>
+ * @copyright based on work by 2012 Dan Poltawski
+ * @copyright based on work by 2020 Ferran Recio <ferran@moodle.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class controlmenu extends controlmenu_base {
@@ -54,29 +54,29 @@ class controlmenu extends controlmenu_base {
      * @return array of edit control items
      */
     public function section_control_items() {
+        global $USER;
 
         $format = $this->format;
         $section = $this->section;
-        $course = $format->get_course();
-
-        $coursecontext = context_course::instance($course->id);
-
-        // REMOVED sectionreturn .
         $section = $format->fmt_get_section($section);       // ADDED.
         $onsectionpage = $section->levelsan < FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC; // ADDED.
+        $course = $format->get_course();
+        // REMOVED sectionreturn.
+        $user = $USER;
 
+        $coursecontext = context_course::instance($course->id);
         $numsections = $format->get_last_section_number();
         $isstealth = false;                                                     // CHANGED: Don't use numsections.
 
         $baseurl = course_get_url($course, $section, ['fmtedit' => true]);      // CHANGED.
         $baseurl->param('sesskey', sesskey());
 
-        $controls = array();
+        $controls = [];
 
-        if (!$isstealth && has_capability('moodle/course:update', $coursecontext)) {
+        if (!$isstealth && has_capability('moodle/course:update', $coursecontext, $user)) {
             if ($section->section > 0
-                && get_string_manager()->string_exists('editsection', 'format_' . $course->format)) {
-                $streditsection = get_string('editsection', 'format_' . $course->format);
+                && get_string_manager()->string_exists('editsection', 'format_' . $format->get_format())) {
+                $streditsection = get_string('editsection', 'format_' . $format->get_format());
             } else {
                 $streditsection = get_string('editsection');
             }
@@ -93,7 +93,7 @@ class controlmenu extends controlmenu_base {
         if ($section->section) {
             $url = clone($baseurl);
             if (!$isstealth) {
-                if (has_capability('moodle/course:sectionvisibility', $coursecontext)) {
+                if (has_capability('moodle/course:sectionvisibility', $coursecontext, $user)) {
                     if ($section->visible) { // Show the hide/show eye.
                         $strhidefromothers = get_string_manager()->string_exists('hidefromothers', 'format_' . $course->format) ?
                                                 get_string('hidefromothers', 'format_' . $course->format)
@@ -131,11 +131,11 @@ class controlmenu extends controlmenu_base {
                     }
                 }
 
-                // INCLUDED /course/format/renderer.php function section_edit_control_items if (!$onsectionpage) .
+                // INCLUDED funct section_control_items if (!$sectionreturn) .
                 if ($onsectionpage) {                                           // CHANGED.
-                    if (has_capability('moodle/course:movesections', $coursecontext)
-                        && has_capability('moodle/course:sectionvisibility', $coursecontext)
-                        && has_capability('moodle/course:update', $coursecontext)) {
+                    if (has_capability('moodle/course:movesections', $coursecontext, $user)
+                        && has_capability('moodle/course:sectionvisibility', $coursecontext, $user)
+                        && has_capability('moodle/course:update', $coursecontext, $user)) {
                         $url = clone($baseurl);
                         if ($section->levelsan - 1 > FORMAT_MULTITOPIC_SECTION_LEVEL_ROOT) { // Raise section. // CHANGED.
                             // CHANGED.
@@ -170,8 +170,8 @@ class controlmenu extends controlmenu_base {
                                 'attr' => array('class' => 'icon fmtmoveleveldown')); // CHANGED.
                         }
                     }
-                    if (has_capability('moodle/course:movesections', $coursecontext)
-                        && has_capability('moodle/course:sectionvisibility', $coursecontext)) {
+                    if (has_capability('moodle/course:movesections', $coursecontext, $user)
+                        && has_capability('moodle/course:sectionvisibility', $coursecontext, $user)) {
                         $url = clone($baseurl);
                         // CHANGED: Replaced up with previous.
                         if (isset($section->prevupid) && $section->prevupid != course_get_format($course)->fmtrootsectionid) {
@@ -207,8 +207,8 @@ class controlmenu extends controlmenu_base {
                     }
                 } else { // END INCLUDED.
                     // Move sections left and right.
-                    if (has_capability('moodle/course:movesections', $coursecontext)
-                        && has_capability('moodle/course:sectionvisibility', $coursecontext)) {
+                    if (has_capability('moodle/course:movesections', $coursecontext, $user)
+                        && has_capability('moodle/course:sectionvisibility', $coursecontext, $user)) {
                         $url = clone($baseurl);
                         // CHANGED: Replaced up with to previous page.
                         if ($section->prevpageid) { // Add a arrow to move section to previous page.
@@ -242,8 +242,8 @@ class controlmenu extends controlmenu_base {
                         // END CHANGED.
 
                     }
-                    if (has_capability('moodle/course:movesections', $coursecontext)
-                        && has_capability('moodle/course:sectionvisibility', $coursecontext)) {
+                    if (has_capability('moodle/course:movesections', $coursecontext, $user)
+                        && has_capability('moodle/course:sectionvisibility', $coursecontext, $user)) {
                         $url = clone($baseurl);
                         if ($section->section > 1) { // Add a arrow to move section up.
                             $url->param('sectionid', $section->id);

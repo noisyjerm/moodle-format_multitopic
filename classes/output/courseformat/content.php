@@ -18,7 +18,9 @@
  * Contains the main course format out class.
  *
  * @package   format_multitopic
- * @copyright 2020 Ferran Recio <ferran@moodle.com>
+ * @copyright 2019 onwards James Calder and Otago Polytechnic
+ * @copyright based on work by 2020 Ferran Recio <ferran@moodle.com>
+ * @copyright based on work by 2012 David Herney Bernal - cirano
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -30,7 +32,9 @@ use core_courseformat\output\local\content as content_base;
  * Base class to render a course format.
  *
  * @package   format_multitopic
- * @copyright 2020 Ferran Recio <ferran@moodle.com>
+ * @copyright 2019 onwards James Calder and Otago Polytechnic
+ * @copyright based on work by 2020 Ferran Recio <ferran@moodle.com>
+ * @copyright based on work by 2012 David Herney Bernal - cirano
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class content extends content_base {
@@ -65,6 +69,14 @@ class content extends content_base {
         $this->fmtsections = $sections;
         $displaysection = $sections[$this->format->singlesectionid];
         $user = $USER;
+
+        // Can we view the section in question?
+        if (!($sectioninfo = $displaysection) || !$sectioninfo->uservisiblesan) { // CHANGED: Already have section info.
+            // This section doesn't exist or is not available for the user.
+            // We actually already check this in course/view.php but just in case exit from this function as well.
+            throw new \moodle_exception('unknowncoursesection', 'error', course_get_url($course),
+                format_string($course->fullname));
+        }
 
         // INCLUDED list of sections parts
         // and /course/format/onetopic/renderer.php function print_single_section_page tabs parts CHANGED.

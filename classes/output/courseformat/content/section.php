@@ -18,7 +18,8 @@
  * Contains the default section course format output class.
  *
  * @package   format_multitopic
- * @copyright 2020 Ferran Recio <ferran@moodle.com>
+ * @copyright 2019 onwards James Calder and Otago Polytechnic
+ * @copyright based on work by 2020 Ferran Recio <ferran@moodle.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -30,7 +31,8 @@ use core_courseformat\output\local\content\section as section_base;
  * Base class to render a course section.
  *
  * @package   format_multitopic
- * @copyright 2020 Ferran Recio <ferran@moodle.com>
+ * @copyright 2019 onwards James Calder and Otago Polytechnic
+ * @copyright based on work by 2020 Ferran Recio <ferran@moodle.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class section extends section_base {
