@@ -59,6 +59,8 @@ class addsection extends addsection_base {
             return $data;
         }
 
+        // REMOVED numsections.
+
         if (course_get_format($course)->uses_sections() && $lastsection < $maxsections) {
             // Current course format does not have 'numsections' option but it has multiple sections suppport.
             // Display the "Add section" link that will insert a section in the end.
@@ -71,17 +73,14 @@ class addsection extends addsection_base {
                 $addstring = get_string('addsections');
             }
 
-            $params = ['courseid' => $course->id,
+            $params = ['courseid' => $course->id,                               // CHANGED.
                 'insertparentid' => $format->singlesectionid,
                 'insertlevel' => FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC,
                 'sesskey' => sesskey()];
 
-            $singlesection = $this->format->get_section_number();
-            if ($singlesection) {
-                $params['sectionreturn'] = $singlesection;
-            }
+            // REMOVED section return.
 
-            $data->addsections = (object) [
+            $data->addsections = (object) [                                     // CHANGED.
                 'url' => new \moodle_url('/course/format/multitopic/_course_changenumsections.php', $params),
                 'title' => $addstring,
                 'newsection' => $maxsections - $lastsection,

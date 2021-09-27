@@ -38,24 +38,6 @@ use core_courseformat\output\local\content\section as section_base;
 class section extends section_base {
 
     /**
-     * Hide the section title.
-     *
-     * This is used on blocks or in the home page where an isolated section is displayed.
-     */
-    public function hide_title(): void {
-        $this->hidetitle = true;
-    }
-
-    /**
-     * Hide the section controls.
-     *
-     * This is used on blocks or in the home page where an isolated section is displayed.
-     */
-    public function hide_controls(): void {
-        $this->hidecontrols = true;
-    }
-
-    /**
      * Export this data so it can be used as the context for a mustache template.
      *
      * @param renderer_base $output typically, the renderer that's calling this function
@@ -66,19 +48,21 @@ class section extends section_base {
         $format = $this->format;
         $course = $format->get_course();
         $thissection = $this->thissection;
+        // REMOVED singlesection.
 
         $summary = new $this->summaryclass($format, $thissection);
         $availability = new $this->availabilityclass($format, $thissection);
+
         $pageid = ($thissection->levelsan < FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC) ? $thissection->id
                                                                                            : $thissection->parentid;
 
         $data = (object)[
             'num' => $thissection->section ?? '0',
             'id' => $thissection->id,
-            'sectionreturnid' => $thissection->section,
+            'sectionreturnid' => $thissection->section,                         // CHANGED.
             'summary' => $summary->export_for_template($output),
             'availability' => $availability->export_for_template($output),
-            'fmtonpage' => $pageid == $format->singlesectionid,
+            'fmtonpage' => $pageid == $format->singlesectionid,                 // ADDED.
         ];
 
         // ADDED.
@@ -95,6 +79,8 @@ class section extends section_base {
         $sectionstyle .= " sectionid-{$thissection->id}";
         $data->fmtclasses = $sectionstyle;
         // END ADDED.
+
+        // REMOVED stealth sections.
 
         if ($format->show_editor()) {
             if (empty($this->hidecontrols)) {

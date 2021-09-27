@@ -47,7 +47,7 @@ class header extends header_base {
      * @return array data context for a mustache template
      */
     public function export_for_template(\renderer_base $output): \stdClass {
-        global $CFG;
+        global $CFG;                                                            // ADDED.
 
         $format = $this->format;
         $section = $this->section;
@@ -58,26 +58,30 @@ class header extends header_base {
             'id' => $section->id,
         ];
 
-        if (!$CFG->linkcoursesections
+        // REMOVED stealth sections.
+        if (!$CFG->linkcoursesections                                           // CHANGED link condition.
                 && ($section->section == $format->get_section_number() || $section->periodduration == '0 day')) {
             // Regular section title.
             $data->title = $output->section_title_without_link($section, $course);
-            $data->issinglesection = true;
-        } else {
+        } else if ($section->uservisiblesan) {
             // Regular section title.
             $data->title = $output->section_title($section, $course);
+        } else {
+            // Regular section title without link.
+            $data->title = $output->section_title_without_link($section, $course);
         }
 
         if (!$section->visible) {
             $data->ishidden = true;
         }
 
-        $coursedisplay = $course->coursedisplay ?? COURSE_DISPLAY_SINGLEPAGE;
-
-        if (!$format->show_editor() && $coursedisplay == COURSE_DISPLAY_MULTIPAGE && empty($data->issinglesection)) {
-            $data->url = course_get_url($course, $section->section);
-            $data->name = get_section_name($course, $section);
+        if ($course->id == SITEID) {
+            $data->sitehome = true;
         }
+
+        // REMOVED index page.
+
+        $data->name = get_section_name($course, $section);
 
         return $data;
     }

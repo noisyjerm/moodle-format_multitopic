@@ -60,6 +60,7 @@ $PAGE->set_url('/course/changenumsections.php', array('courseid' => $courseid));
 // Authorisation checks.
 require_login($course);
 require_capability('moodle/course:update', \context_course::instance($course->id));
+require_capability('moodle/course:movesections', \context_course::instance($course->id));
 require_sesskey();
 
 $desirednumsections = 0;
