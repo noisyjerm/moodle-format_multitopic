@@ -13,11 +13,6 @@ body.format-multitopic #course-header {
     width: 100%;
 }
 
-/* Hide collapsed sections */
-body.format-multitopic.jsenabled ul.sections li.section.section-collapsed .content .section_availability ~ * {
-    display: none;
-}
-
 /* Hide activity navigation.
 Conditional section availability isn't propagated to subsections, so activities may be available when they shouldn't be.
 Not sure how to fix this properly,

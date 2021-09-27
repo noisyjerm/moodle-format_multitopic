@@ -72,30 +72,32 @@
             "hasmenu": true
         },
         "cmcontrols": "[Add an activity or resource]",
-        "testing": true,
         "testingsection": true
     }
 }}
 {{#testingsection}}<ul>{{/testingsection}}
 <li id="section-{{num}}"
-        class="section main {{#onlysummary}} section-summary {{/onlysummary}} clearfix
-              {{#ishidden}} hidden {{/ishidden}} {{#iscurrent}} current {{/iscurrent}}
-              {{fmtclasses}}"
-        {{^testing}}role="region"{{/testing}}
-        aria-labelledby="sectionid-{{id}}-title"
-        data-sectionid="{{num}}"
-        data-sectionreturnid="{{sectionreturnid}}"
-        {{^fmtonpage}}style="display: none;"{{/fmtonpage}}
-        >
-    {{#singleheader}} {{> format_multitopic/courseformat/content/section/header }} {{/singleheader}}
+    class="section main {{#onlysummary}} section-summary {{/onlysummary}} clearfix
+            {{#ishidden}} hidden {{/ishidden}} {{#iscurrent}} current {{/iscurrent}}
+            {{fmtclasses}}"
+    data-sectionid="{{num}}"
+    data-sectionreturnid="{{sectionreturnid}}"
+    data-for="section"
+    data-id="{{id}}"
+    data-number="{{num}}"
+    {{^fmtonpage}}style="display: none;"{{/fmtonpage}}
+>
     <div class="left side">{{#iscurrent}} {{{currentlink}}} {{/iscurrent}}</div>
     <div class="right side">
     {{#controlmenu}}
             {{> core_courseformat/local/content/section/controlmenu }}
     {{/controlmenu}}
     </div>
-    <div class="content">
-        {{#header}} {{> format_multitopic/courseformat/content/section/header }} {{/header}}
+    {{#header}} {{> format_multitopic/courseformat/content/section/header }} {{/header}}
+    <div id="coursecontentcollapse{{num}}"
+         class="content 
+             {{^sitehome}}course-content-item-content {{#iscollapsible}}collapse{{/iscollapsible}} {{#isactive}}show{{/isactive}}{{/sitehome}}
+         ">
         {{#availability}}
             {{> core_courseformat/local/content/section/availability }}
         {{/availability}}

@@ -979,7 +979,7 @@ class format_multitopic extends core_courseformat\base {
                                         ($section->levelsan < FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC ? 'icon fa fa-folder-o fa-fw'
                                                                                                     : 'icon fa fa-list fa-fw')])
                                     . ' ' . get_section_name($section->course, $section);  // CHANGED.
-        // TODO: Fix collapse icon for AJAX rename, somehow?
+        // TODO: No icon on collapsible sections?
         if ($linkifneeded) {
             // Display link under the section name, for collapsible sections.
             $navigation = ($section->levelsan < FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC)

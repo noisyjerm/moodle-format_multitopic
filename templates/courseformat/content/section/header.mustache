@@ -27,11 +27,25 @@
     }
 }}
 
-<h3 id="sectionid-{{id}}-title" class="sectionname">
-    {{#url}}
-    <a href="{{{url}}}" class="{{#ishidden}} dimmed_text {{/ishidden}}">{{name}}</a>
-    {{/url}}
-    {{^url}}
-    <span>{{{title}}}</span>
-    {{/url}}
-</h3>
+        <div class="d-flex">
+            {{#iscollapsible}}
+            <a role="button" data-toggle="collapse"
+               href="#coursecontentcollapse{{num}}"
+               id="collapssesection{{num}}"
+               aria-expanded="{{#isactive}}true{{/isactive}}{{^isactive}}false{{/isactive}}"
+               aria-controls="coursecontentcollapse{{num}}"
+               class="btn btn-icon mr-1 icons-collapse-expand {{^isactive}}collapsed{{/isactive}}"
+               aria-label="{{name}}">
+            <span class="expanded-icon icon-no-margin p-2" data-toggle="tooltip" title="{{#str}} collapse, core {{/str}}">
+                {{#pix}} t/expandedchevron, core {{/pix}}
+            </span>
+                <span class="collapsed-icon icon-no-margin p-2" data-toggle="tooltip" title="{{#str}} expand, core {{/str}}">
+                    {{#pix}} t/collapsedchevron, core {{/pix}}
+                </span>
+            </a>
+            {{/iscollapsible}}
+            <h3 class="sectionid-{{id}}-title sectionname course-content-item {{^visible}}dimmed{{/visible}}"
+                id="coursecontentsection{{num}}" data-for="section_title" data-id="{{id}}" data-number="{{num}}">
+                {{{title}}}
+            </h3>
+        </div>

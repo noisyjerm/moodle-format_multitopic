@@ -46,7 +46,7 @@ class content extends content_base {
      * @return stdClass data context for a mustache template
      */
     public function export_for_template(\renderer_base $output) {
-        global $USER;                                                           // INCLUDED from course/format/classes/output/local/content/section/cmlist.php .
+        global $USER;                               // INCLUDED from course/format/classes/output/local/content/section/cmlist.php .
 
         $format = $this->format;
 
@@ -57,7 +57,7 @@ class content extends content_base {
         $displaysection = $sections[$this->format->singlesectionid];
         // END ADDED.
 
-        $user = $USER;                                                          // INCLUDED from course/format/classes/output/local/content/section/cmlist.php .
+        $user = $USER;                              // INCLUDED from course/format/classes/output/local/content/section/cmlist.php .
 
         // INCLUDED from course/format/classes/output/section_renderer.php print_single_section_page() .
         // Can we view the section in question?

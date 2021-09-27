@@ -67,17 +67,20 @@ class section extends section_base {
 
         // ADDED.
         $sectionstyle = '';
+        $iscollapsible = false;
         // Determine the section type.
         if ($thissection->levelsan < FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC) {
             $sectionstyle .= ' section-page';
         } else if (format_multitopic_duration_as_days($thissection->periodduration) === 0) {
             $sectionstyle .= ' section-topic section-topic-untimed';
         } else {
-            $sectionstyle .= ' section-topic section-topic-timed section-collapsed';
+            $sectionstyle .= ' section-topic section-topic-timed';
+            $iscollapsible = true;
         }
 
         $sectionstyle .= " sectionid-{$thissection->id}";
         $data->fmtclasses = $sectionstyle;
+        $data->iscollapsible = $iscollapsible;
         // END ADDED.
 
         // REMOVED stealth sections.
@@ -97,7 +100,7 @@ class section extends section_base {
         }
 
         // For now sections are always expanded. User preferences will be done in MDL-71211.
-        $data->isactive = true;
+        $data->isactive = false;
 
         // REMOVED section 0 special case.
 

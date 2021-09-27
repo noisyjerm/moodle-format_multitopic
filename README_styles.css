@@ -49,9 +49,7 @@ body.format-multitopic ul.sections li.section {
     visibility: inherit;
     margin-bottom: 1rem;
 }
-body.format-multitopic ul.sections li.section .content {
-    display: block;
-}
+/* Removed display: block; */
 body.format-multitopic ul.sections li.section .content .sectionname {
     background: #eee;
     padding: 10px;
