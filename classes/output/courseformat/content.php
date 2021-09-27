@@ -40,43 +40,38 @@ use core_courseformat\output\local\content as content_base;
 class content extends content_base {
 
     /**
-     * Constructor.
-     *
-     * @param \format_multitopic $format the coruse format
-     */
-    public function __construct(\format_multitopic $format) {
-        $this->format = $format;
-
-        // Load output classes names from format.
-        $this->sectionclass = $format->get_output_classname('content\\section');
-        $this->addsectionclass = $format->get_output_classname('content\\addsection');
-        $this->sectionnavigationclass = $format->get_output_classname('content\\sectionnavigation');
-        $this->sectionselectorclass = $format->get_output_classname('content\\sectionselector');
-    }
-
-    /**
      * Export this data so it can be used as the context for a mustache template (core/inplace_editable).
      *
      * @param renderer_base $output typically, the renderer that's calling this function
      * @return stdClass data context for a mustache template
      */
     public function export_for_template(\renderer_base $output) {
-        global $USER;
-        $format = $this->format;
-        $course = $format->get_course();
+        global $USER;                                                           // INCLUDED from course/format/classes/output/local/content/section/cmlist.php .
 
+        $format = $this->format;
+
+        // ADDED.
+        $course = $format->get_course();
         $sections = $this->format->fmt_get_sections();
         $this->fmtsections = $sections;
         $displaysection = $sections[$this->format->singlesectionid];
-        $user = $USER;
+        // END ADDED.
 
+        $user = $USER;                                                          // INCLUDED from course/format/classes/output/local/content/section/cmlist.php .
+
+        // INCLUDED from course/format/classes/output/section_renderer.php print_single_section_page() .
         // Can we view the section in question?
         if (!($sectioninfo = $displaysection) || !$sectioninfo->uservisiblesan) { // CHANGED: Already have section info.
             // This section doesn't exist or is not available for the user.
             // We actually already check this in course/view.php but just in case exit from this function as well.
-            throw new \moodle_exception('unknowncoursesection', 'error', course_get_url($course),
-                format_string($course->fullname));
+            throw new \moodle_exception(
+                'unknowncoursesection',
+                'error',
+                course_get_url($course),
+                format_string($course->fullname)
+            );
         }
+        // END INCLUDED.
 
         // INCLUDED list of sections parts
         // and /course/format/onetopic/renderer.php function print_single_section_page tabs parts CHANGED.
@@ -232,8 +227,8 @@ class content extends content_base {
 
         $data = (object)[
             'title' => $format->page_title(), // This method should be in the course_format class.
-            'tabs' => $tabseft,
-            'collapseexpandall' => $collapseexpandall,
+            'tabs' => $tabseft,                                                 // ADDED.
+            'collapseexpandall' => $collapseexpandall,                          // ADDED.
             'initialsection' => $initialsection,
             'sections' => $sectionseft,
             'numsections' => $addsection->export_for_template($output),
@@ -267,6 +262,9 @@ class content extends content_base {
         }
         // END INCLUDED.
 
+        // REMOVED navigation.
+
+        // INCLUDED from course/format/classes/output/local/content/section/cmlist.php export_for_template() .
         $data->showclipboard = $disableajax || ismoving($course->id);
 
         $showmovehere = ismoving($course->id);
@@ -276,6 +274,7 @@ class content extends content_base {
             $data->movingstr = strip_tags(get_string('activityclipboard', '', $user->activitycopyname));
             $data->cancelcopyurl = new \moodle_url('/course/mod.php', ['cancelcopy' => 'true', 'sesskey' => sesskey()]);
         }
+        // END INCLUDED.
 
         return $data;
     }

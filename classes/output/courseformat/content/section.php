@@ -90,12 +90,27 @@ class section extends section_base {
                 $data->cmcontrols = $output->course_section_add_cm_control($course, $thissection->section);
         }
 
+        // REMOVED coursedisplay setting.
+
+        if ($course->id == SITEID) {
+            $data->sitehome = true;
+        }
+
+        // For now sections are always expanded. User preferences will be done in MDL-71211.
+        $data->isactive = true;
+
+        // REMOVED section 0 special case.
+
         // When a section is displayed alone the title goes over the section, not inside it.
         $header = new $this->headerclass($format, $thissection);
+
+        // REMOVED singlesection code.
 
         if (empty($this->hidetitle)) {
             $data->header = $header->export_for_template($output);
         }
+
+        // REMOVED index code.
 
         // Add the cm list.
         if ($thissection->uservisible) {
@@ -116,4 +131,3 @@ class section extends section_base {
         return $data;
     }
 }
-
