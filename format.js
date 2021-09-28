@@ -108,3 +108,57 @@ M.course.format.process_sections = function(Y, sectionlist, response, sectionfro
         // END INCLUDED.
     }
 };
+
+// REMAINDER ADDED.
+
+/**
+ * Expand, and scroll to, the section specified in the URL bar.
+ *
+ * @param {HashChangeEvent?} event The triggering event, if any
+ */
+ M.course.format.fmtCollapseOnHashChange = function(event) {
+
+    // Find the specified section.
+    var anchor = window.location.hash.substr(1);
+    var selSectionDom = anchor ?
+                    document.querySelector("body.format-multitopic .course-content ul.sections li.section.section-topic." + anchor)
+                    : null;
+
+    // Exit if there is an event, but no recognised section.
+    if (!selSectionDom) {
+        return;
+    }
+
+    // Expand, if appropriate.
+    var sectionContentDom = selSectionDom.querySelector(":scope .content.course-content-item-content");
+    if (sectionContentDom.classList.contains("collapse") && !sectionContentDom.classList.contains("show")) {
+        sectionContentDom.classList.add("show");
+        selSectionDom.querySelector(":scope .icons-collapse-expand").classList.remove("collapsed");
+    }
+
+    // Scroll to the specified section.
+    if (selSectionDom) {
+        selSectionDom.scrollIntoView();
+    }
+
+};
+
+/**
+ * Initialise: Set the initial state of collapsible sections, and watch for user input.
+ */
+ M.course.format.fmtCollapseInit = function() {
+
+    // Set the initial state of collapsible sections.
+    M.course.format.fmtCollapseOnHashChange();
+
+    // Capture clicks on any other course section links.
+    window.addEventListener("hashchange", M.course.format.fmtCollapseOnHashChange);
+
+};
+
+// Run initialisation when the page is loaded, or now, if the page is already loaded.
+if (document.readyState == "loading") {
+    document.addEventListener("DOMContentLoaded", M.course.format.fmtCollapseInit);
+} else {
+    M.course.format.fmtCollapseInit();
+}

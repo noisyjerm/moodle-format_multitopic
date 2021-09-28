@@ -2,6 +2,11 @@ body.format-multitopic ul.sections {
     list-style: none;
 }
 
+/* INCLUDED from theme/boost/style/moodle.css */
+body.format-multitopic ul.sections li.section .content.collapse:not(.show) {
+    display: none;
+}
+/* END INCLUDED */
 
 /* ADDED */
 
@@ -17,7 +22,6 @@ body.format-multitopic #course-header {
 Conditional section availability isn't propagated to subsections, so activities may be available when they shouldn't be.
 Not sure how to fix this properly,
 but we can at least avoid confusing users by pointing them to activities that shouldn't be available. */
-body.format-multitopic.path-mod.pagelayout-incourse #page #page-content [role='main'] + .m-t-2.m-b-1,
 body.format-multitopic.path-mod.pagelayout-incourse #page #page-content .activity-navigation {
     display: none;
 }
