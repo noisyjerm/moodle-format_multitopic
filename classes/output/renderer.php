@@ -14,6 +14,17 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * Renderer for outputting the Multitopic course format.
+ *
+ * @package   format_multitopic
+ * @copyright 2019 onwards James Calder and Otago Polytechnic
+ * @copyright based on work by 2012 Dan Poltawski
+ * @copyright based on work by 2020 Ferran Recio <ferran@moodle.com>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @since     Moodle 2.3
+ */
+
 namespace format_multitopic\output;
 
 use core_courseformat\output\section_renderer;

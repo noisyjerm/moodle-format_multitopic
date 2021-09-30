@@ -308,7 +308,7 @@ class content extends content_base {
                 $pageid = ($thissection->levelsan < FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC) ? $thissection->id
                                                                                            : $thissection->parentid;
                 $onpage = ($pageid == $format->singlesectionid);
-                if ($thissection->uservisiblesan && ($onpage || $format->show_editor())) {
+                if ($onpage || $format->show_editor()) {
                     $sectionseft[] = $section->export_for_template($output);
                 }
 
