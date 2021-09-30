@@ -94,7 +94,7 @@ class content extends content_base {
             // Show the section if the user is permitted to access it, OR if it's not available
             // but there is some available info text which explains the reason & should display,
             // OR it is hidden but the course has a setting to display hidden sections as unavilable.
-            $showsection = $thissection->uservisible ||
+            $showsection = $thissection->uservisiblesan ||
                     ($thissection->visible || !$course->hiddensections)
                     && ($thissection->available || !empty($thissection->availableinfo));
 
@@ -197,25 +197,6 @@ class content extends content_base {
 
         // END INCLUDED.
 
-        // ADDED: Expand/collapse all sections.
-        $collapsiblenum = 0;
-        $thissection = $displaysection->nextanyid ? $sections[$displaysection->nextanyid] : null;
-        while ($thissection && ($thissection->levelsan >= FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC)) {
-            if ((format_multitopic_duration_as_days($thissection->periodduration) !== 0) && $thissection->uservisiblesan) {
-                $collapsiblenum++;
-            }
-            $thissection = $thissection->nextanyid ? $sections[$thissection->nextanyid] : null;
-        }
-        $collapseexpandall = '';
-        $collapseexpandall .= \html_writer::start_tag('div',
-                array('class' => 'collapsible-actions', 'style' => $collapsiblenum ? '' : 'display: none;'));
-        $collapseexpandall .= \html_writer::tag('a', get_string('expandall'),
-                array('href' => '#', 'class' => 'collapseexpand expand-all', 'role' => 'button'));
-        $collapseexpandall .= \html_writer::tag('a', get_string('collapseall'),
-                array('href' => '#', 'class' => 'collapseexpand collapse-all', 'role' => 'button', 'style' => 'display: none;'));
-        $collapseexpandall .= \html_writer::end_tag('div');
-        // END ADDED.
-
         $addsection = new $this->addsectionclass($format);
 
         // Most formats uses section 0 as a separate section so we remove from the list.
@@ -228,7 +209,6 @@ class content extends content_base {
         $data = (object)[
             'title' => $format->page_title(), // This method should be in the course_format class.
             'tabs' => $tabseft,                                                 // ADDED.
-            'collapseexpandall' => $collapseexpandall,                          // ADDED.
             'initialsection' => $initialsection,
             'sections' => $sectionseft,
             'numsections' => $addsection->export_for_template($output),
@@ -262,8 +242,6 @@ class content extends content_base {
         }
         // END INCLUDED.
 
-        // REMOVED navigation.
-
         // INCLUDED from course/format/classes/output/local/content/section/cmlist.php export_for_template() .
         $data->showclipboard = $disableajax || ismoving($course->id);
 
@@ -275,6 +253,8 @@ class content extends content_base {
             $data->cancelcopyurl = new \moodle_url('/course/mod.php', ['cancelcopy' => 'true', 'sesskey' => sesskey()]);
         }
         // END INCLUDED.
+
+        // REMOVED navigation.
 
         return $data;
     }
@@ -291,11 +271,12 @@ class content extends content_base {
         $course = $format->get_course();
         $modinfo = $this->format->get_modinfo();
 
-        $sectionatlevel = array_fill(FORMAT_MULTITOPIC_SECTION_LEVEL_ROOT,
+        $sectionatlevel = array_fill(FORMAT_MULTITOPIC_SECTION_LEVEL_ROOT,      // ADDED.
                                      FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC - FORMAT_MULTITOPIC_SECTION_LEVEL_ROOT, null);
 
         // Generate section list.
         $sectionseft = [];
+        // REMOVED stealthsections and numsections.
         foreach ($this->get_sections_to_display($modinfo) as $thissection) {
             // The course/view.php check the section existence but the output can be called
             // from other parts so we need to check it.
@@ -306,32 +287,35 @@ class content extends content_base {
 
             $section = new $this->sectionclass($format, $thissection);
 
+            // ADDED.
             for ($level = $thissection->levelsan; $level < FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC; $level++) {
                 $sectionatlevel[$level] = $thissection;
             }
+            // END ADDED.
 
-            // REMOVED: Section 0 differentiation and numsections.
+            // REMOVED: numsections.
 
             // Show the section if the user is permitted to access it, OR if it's not available
             // but there is some available info text which explains the reason & should display,
             // OR it is hidden but the course has a setting to display hidden sections as unavilable.
-            $showsection = $thissection->uservisible ||
+            $showsection = $thissection->uservisiblesan ||
                     ($thissection->visible || !$course->hiddensections)
                     && ($thissection->available || !empty($thissection->availableinfo));
-            // REMOVED: return if section hidden (we may have more to do), and coursedisplay.
+            // REMOVED: return if section hidden.
 
             if ($thissection->levelsan <= FORMAT_MULTITOPIC_SECTION_LEVEL_ROOT
                 || $sectionatlevel[$level - 1]->uservisiblesan && $showsection) {   // ADDED.
                 $pageid = ($thissection->levelsan < FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC) ? $thissection->id
                                                                                            : $thissection->parentid;
                 $onpage = ($pageid == $format->singlesectionid);
-                if ($thissection->uservisible && ($onpage || $format->show_editor())) {
+                if ($thissection->uservisiblesan && ($onpage || $format->show_editor())) {
                     $sectionseft[] = $section->export_for_template($output);
                 }
 
             }
 
         }
+        // REMOVED stealthsections.
         return $sectionseft;
     }
 

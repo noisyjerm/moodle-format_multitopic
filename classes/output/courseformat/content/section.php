@@ -48,12 +48,12 @@ class section extends section_base {
         $format = $this->format;
         $course = $format->get_course();
         $thissection = $this->thissection;
-        // REMOVED singlesection.
+        $singlesection = (object) [ 'id' => $format->singlesectionid ];         // CHANGED.
 
         $summary = new $this->summaryclass($format, $thissection);
         $availability = new $this->availabilityclass($format, $thissection);
 
-        $pageid = ($thissection->levelsan < FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC) ? $thissection->id
+        $pageid = ($thissection->levelsan < FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC) ? $thissection->id   // ADDED.
                                                                                            : $thissection->parentid;
 
         $data = (object)[
@@ -62,11 +62,14 @@ class section extends section_base {
             'sectionreturnid' => $thissection->section,                         // CHANGED.
             'summary' => $summary->export_for_template($output),
             'availability' => $availability->export_for_template($output),
-            'fmtonpage' => $pageid == $format->singlesectionid,                 // ADDED.
+            'fmtonpage' => $pageid == $singlesection->id,                       // ADDED.
         ];
 
         // ADDED.
-        $sectionstyle = '';
+        $pageid = ($thissection->levelsan < FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC) ? $thissection->id
+            : $thissection->parentid;
+        $onpage = ($pageid == $format->singlesectionid);
+        $sectionstyle = " sectionid-{$thissection->id}";
         $iscollapsible = false;
         // Determine the section type.
         if ($thissection->levelsan < FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC) {
@@ -75,12 +78,11 @@ class section extends section_base {
             $sectionstyle .= ' section-topic section-topic-untimed';
         } else {
             $sectionstyle .= ' section-topic section-topic-timed';
-            $iscollapsible = true;
+            $iscollapsible = $onpage;
         }
-
-        $sectionstyle .= " sectionid-{$thissection->id}";
         $data->fmtclasses = $sectionstyle;
         $data->iscollapsible = $iscollapsible;
+        $data->fmtonpage = $onpage;
         // END ADDED.
 
         // REMOVED stealth sections.
@@ -90,6 +92,7 @@ class section extends section_base {
                 $controlmenu = new $this->controlmenuclass($format, $thissection);
                 $data->controlmenu = $controlmenu->export_for_template($output);
             }
+            // REMOVED stealth sections.
                 $data->cmcontrols = $output->course_section_add_cm_control($course, $thissection->section);
         }
 
@@ -100,7 +103,7 @@ class section extends section_base {
         }
 
         // For now sections are always expanded. User preferences will be done in MDL-71211.
-        $data->isactive = false;
+        $data->isactive = false;                                                // CHANGED.
 
         // REMOVED section 0 special case.
 
@@ -116,7 +119,7 @@ class section extends section_base {
         // REMOVED index code.
 
         // Add the cm list.
-        if ($thissection->uservisible) {
+        if ($thissection->uservisiblesan && $onpage) {                          // CHANGED.
             $cmlist = new $this->cmlistclass($format, $thissection);
             $data->cmlist = $cmlist->export_for_template($output);
         }

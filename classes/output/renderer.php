@@ -14,28 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * Renderer for outputting the Multitopic course format.
- *
- * @package   format_multitopic
- * @copyright 2019 onwards James Calder and Otago Polytechnic
- * @copyright based on work by 2012 Dan Poltawski
- * @copyright based on work by 2020 Ferran Recio <ferran@moodle.com>
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @since     Moodle 2.3
- */
-
 namespace format_multitopic\output;
 
 use core_courseformat\output\section_renderer;
 use moodle_page;
 
-defined('MOODLE_INTERNAL') || die();
-
-require_once($CFG->dirroot . '/course/format/renderer.php');
 // ADDED.
+defined('MOODLE_INTERNAL') || die();
 require_once(__DIR__ . '/../../lib.php');
-require_once(__DIR__ . '/../../locallib.php');
 require_once(__DIR__ . '/../../classes/courseheader.php');
 require_once(__DIR__ . '/../../classes/coursecontentheaderfooter.php');
 // END ADDED.
@@ -48,7 +34,7 @@ require_once(__DIR__ . '/../../classes/coursecontentheaderfooter.php');
  * @copyright based on work by 2020 Ferran Recio <ferran@moodle.com>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class renderer extends \core_courseformat\output\section_renderer {         // CHANGED.
+class renderer extends section_renderer {
 
     /**
      * Constructor method, calls the parent constructor.
@@ -107,12 +93,12 @@ class renderer extends \core_courseformat\output\section_renderer {         // C
             // use core_crouseformat/local/xxx_format templates by default.
             $corepath = 'core_courseformat\/output\/local';
             $pluginpath = 'format_.+\/output\/courseformat';
-            $specialrenderers = '/^(?<componentpath>' /*. $corepath . '|'*/ . $pluginpath . ')\/(?<template>.+)$/';
+            $specialrenderers = '/^(?<componentpath>' /*. $corepath . '|'*/ . $pluginpath . ')\/(?<template>.+)$/'; // CHANGED.
             $matches = null;
 
             if (preg_match($specialrenderers, $fullpath, $matches)) {
                 $data = $widget->export_for_template($this);
-                return $this->render_from_template('format_multitopic/courseformat/' . $matches['template'], $data);
+                return $this->render_from_template('format_multitopic/courseformat/' . $matches['template'], $data);    // CHANGED.
             }
         }
         // If nothing works, let the parent class decide.
