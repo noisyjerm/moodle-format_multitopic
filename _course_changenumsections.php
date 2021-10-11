@@ -60,14 +60,12 @@ $PAGE->set_url('/course/changenumsections.php', array('courseid' => $courseid));
 // Authorisation checks.
 require_login($course);
 require_capability('moodle/course:update', \context_course::instance($course->id));
-require_capability('moodle/course:movesections', \context_course::instance($course->id));
 require_sesskey();
 
 $desirednumsections = 0;
 $courseformat = course_get_format($course);
 $lastsectionnumber = $courseformat->get_last_section_number();
-$maxsections = method_exists($courseformat, "get_max_sections") ? $courseformat->get_max_sections() : 52;
-// CHANGED LINE ABOVE: For Moodle 3.5.0.
+$maxsections = $courseformat->get_max_sections();
 
 if (false) {                                                                    // CHANGED: Don't use numsections.
     $desirednumsections = $courseformatoptions['numsections'] + 1;

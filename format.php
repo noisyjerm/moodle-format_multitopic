@@ -32,10 +32,10 @@ require_once($CFG->libdir . '/completionlib.php');
 // Horrible backwards compatible parameter aliasing.
 // REMOVED.
 
-$context = \context_course::instance($course->id);
 // Retrieve course format option fields and add them to the $course object.
 $format = course_get_format($course);
 $course = $format->get_course();
+$context = \context_course::instance($course->id);
 
 // REMOVED set course marker.
 

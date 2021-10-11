@@ -34,15 +34,12 @@ M.course.format.get_config = function() {
  * @param {string} node1 node to swap to
  * @param {string} node2 node to swap with
  */
-/* eslint-disable camelcase, no-unused-vars */
 M.course.format.swap_sections = function(Y, node1, node2) {
-    /* eslint-enable camelcase, no-unused-vars */
     var CSS = {
         COURSECONTENT: 'course-content',
         SECTIONADDMENUS: 'section_add_menus'
     };
 
-    // Reinstated this, since not using course renderer wrapper.
     var sectionlist = Y.Node.all('.' + CSS.COURSECONTENT + ' ' + M.course.format.get_section_selector(Y));
     // Swap the non-ajax menus, noting these are not always present (depends on theme and user prefs).
     if (sectionlist.item(node1).one('.' + CSS.SECTIONADDMENUS)) {
@@ -91,7 +88,7 @@ M.course.format.process_sections = function(Y, sectionlist, response, sectionfro
             newstr = str.substr(0, stridx + 1) + i;
             ele.setAttribute('title', newstr);
             // Update the aria-label for the section.
-            sectionlist.item(i).setAttribute('aria-label', content.get('innerText').trim()); // For Sharing Cart.
+            // REMOVED.
 
             // INCLUDED /course/format/weeks/format.js M.course.format.process_sections part.
             // Remove the current class as section has been moved.
@@ -124,7 +121,7 @@ M.course.format.process_sections = function(Y, sectionlist, response, sectionfro
                     document.querySelector("body.format-multitopic .course-content ul.sections li.section.section-topic." + anchor)
                     : null;
 
-    // Exit if there is an event, but no recognised section.
+    // Exit if there is no recognised section.
     if (!selSectionDom) {
         return;
     }
@@ -151,7 +148,7 @@ M.course.format.process_sections = function(Y, sectionlist, response, sectionfro
     // Set the initial state of collapsible sections.
     M.course.format.fmtCollapseOnHashChange();
 
-    // Capture clicks on any other course section links.
+    // Capture clicks on course section links.
     window.addEventListener("hashchange", M.course.format.fmtCollapseOnHashChange);
 
 };

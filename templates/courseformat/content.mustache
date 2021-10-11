@@ -161,30 +161,36 @@
         }
     }
 }}
-<h2 class="accesshide">{{{title}}}</h2>
-{{#movebutton}}
-<div class="buttons visibleifjs" style="float: right;">{{> core/single_button}}</div>
-{{#showclipboard}}
-<p>
-<i class="icon fa fa-clipboard fa-fw"></i>
-{{#showmovehere}}{{movingstr}} (<a href="{{{cancelcopyurl}}}">{{#str}} cancel {{/str}}</a>){{/showmovehere}}
-{{^showmovehere}}[ {{#str}}activityclipboard_placeholder, format_multitopic{{/str}} ]{{/showmovehere}}
-</p>
-{{/showclipboard}}
-{{/movebutton}}
-
-<div style="clear: both;">
-    {{#tabs}}
-        {{> core/tabtree}}
-    {{/tabs}}
+<div id="{{uniqid}}-course-format">
+    <h2 class="accesshide">{{{title}}}</h2>
+    {{#movebutton}}
+    <div class="buttons visibleifjs" style="float: right;">{{> core/single_button}}</div>
+    {{#showclipboard}}
+    <p>
+    <i class="icon fa fa-clipboard fa-fw"></i>
+    {{#showmovehere}}{{movingstr}} (<a href="{{{cancelcopyurl}}}">{{#str}} cancel {{/str}}</a>){{/showmovehere}}
+    {{^showmovehere}}[ {{#str}}activityclipboard_placeholder, format_multitopic{{/str}} ]{{/showmovehere}}
+    </p>
+    {{/showclipboard}}
+    {{/movebutton}}
+    <div style="clear: both;">
+        {{#tabs}}
+            {{> core/tabtree}}
+        {{/tabs}}
+    </div>
+    {{{completionhelp}}}
+    <ul class="sections" data-for="course_sectionlist">
+        {{#initialsection}}
+            {{> format_multitopic/courseformat/content/section }}
+        {{/initialsection}}
+        {{#sections}}
+            {{> format_multitopic/courseformat/content/section }}
+        {{/sections}}
+    </ul>
+    {{#numsections}} {{> format_multitopic/courseformat/content/addsection}} {{/numsections}}
 </div>
-{{{completionhelp}}}
-<ul class="sections">
-    {{#initialsection}}
-        {{> format_multitopic/courseformat/content/section }}
-    {{/initialsection}}
-    {{#sections}}
-        {{> format_multitopic/courseformat/content/section }}
-    {{/sections}}
-</ul>
-{{#numsections}} {{> format_multitopic/courseformat/content/addsection}} {{/numsections}}
+{{#js}}
+require(['core_courseformat/local/content'], function(component) {
+    component.init('{{uniqid}}-course-format');
+});
+{{/js}}
