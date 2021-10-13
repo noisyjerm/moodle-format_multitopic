@@ -50,7 +50,7 @@ if ($sectionid) {
                             array('id' => $sectionid, 'course' => $course->id), '*', MUST_EXIST);
 }
 // END ADDED.
-if (!empty($displaysection)) {
+if (isset($displaysection)) {
     $format->set_section_number($displaysection);
 }
 $outputclass = $format->get_output_classname('content');
