@@ -20,9 +20,10 @@
  * @since     Moodle 2.0
  * @package   format_multitopic
  * @copyright 2019 onwards James Calder and Otago Polytechnic
- * @copyright based on work by 2009 Sam Hemelryk,
- * @copyright based on work by 2012 David Herney Bernal - cirano,
- * @copyright based on work by 2014 Marina Glancy
+ * @copyright based on work by 2009 Sam Hemelryk
+ * @copyright based on work by 2012 onwards Marina Glancy
+ * @copyright based on work by 2012 David Herney Bernal - cirano
+ * @copyright based on work by 2020 Ferran Recio <ferran@moodle.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -58,9 +59,10 @@ const FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC   = 2;
  *
  * @package   format_multitopic
  * @copyright 2019 onwards James Calder and Otago Polytechnic
- * @copyright based on work by 2009 Sam Hemelryk,
- * @copyright based on work by 2012 David Herney Bernal - cirano,
- * @copyright based on work by 2014 Marina Glancy
+ * @copyright based on work by 2009 Sam Hemelryk
+ * @copyright based on work by 2012 onwards Marina Glancy
+ * @copyright based on work by 2012 David Herney Bernal - cirano
+ * @copyright based on work by 2020 Ferran Recio <ferran@moodle.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class format_multitopic extends core_courseformat\base {
@@ -106,6 +108,18 @@ class format_multitopic extends core_courseformat\base {
      * @return bool
      */
     public function uses_sections() : bool {
+        return true;
+    }
+
+    /**
+     * Returns true if this course format uses course index
+     *
+     * This function may be called without specifying the course id
+     * i.e. in course_index_drawer()
+     *
+     * @return bool
+     */
+    public function uses_course_index() {
         return true;
     }
 
@@ -453,7 +467,7 @@ class format_multitopic extends core_courseformat\base {
      *
      * @param int|stdClass $singlesection section or num
      */
-    public function set_section($singlesection): void {
+    public function set_section_number($singlesection): void {
         $singlesection = $this->get_section($singlesection);
 
         // If display section is a topic, get the page it is on instead.
@@ -532,6 +546,20 @@ class format_multitopic extends core_courseformat\base {
         return $ajaxsupport;
     }
     // END INCLUDED.
+
+    /**
+     * Returns true if this course format is compatible with content components.
+     *
+     * Using components means the content elements can watch the frontend course state and
+     * react to the changes. Formats with component compatibility can have more interactions
+     * without refreshing the page, like having drag and drop from the course index to reorder
+     * sections and activities.
+     *
+     * @return bool if the format is compatible with components.
+     */
+    public function supports_components() {
+        return true;
+    }
 
     /**
      * Loads all of the course sections into the navigation.
