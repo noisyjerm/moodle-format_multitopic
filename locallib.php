@@ -77,7 +77,7 @@ function format_multitopic_set_section_visible(int $courseid, \stdClass $section
 /**
  * Creates a course section and adds it to the specified position
  *
- * @param int|stdClass $courseorid course id or course object
+ * @param stdClass $courseorid course id or course object
  * @param stdClass $section position to insert at.  Must specify parentid.  May specify level.
  * @return stdClass created section object.  Has database properties plus parentid and levelsan.
  */

@@ -828,7 +828,7 @@ class format_multitopic extends core_courseformat\base {
     /**
      * Adds format options elements to the course/section edit form.
      *
-     * This function is called from {@link course_edit_form::definition_after_data()}.
+     * This function is called from {@see course_edit_form::definition_after_data()}.
      *
      * @param MoodleQuickForm $mform form the elements are added to.
      * @param bool $forsection 'true' if this is a section edit form, 'false' if this is course edit form.
@@ -856,8 +856,8 @@ class format_multitopic extends core_courseformat\base {
      * If the course format was changed to 'multitopic', we try to copy options
      * 'periodduration', 'hiddensections', and 'bannerslice' from the previous format.
      *
-     * @param stdClass|array $data return value from {@link moodleform::get_data()} or array with data
-     * @param stdClass $oldcourse if this function is called from {@link update_course()}
+     * @param stdClass|array $data return value from {@see moodleform::get_data()} or array with data
+     * @param stdClass $oldcourse if this function is called from {@see update_course()}
      *     this object contains information about the course before update
      * @return bool whether there were any changes to the options values
      */
