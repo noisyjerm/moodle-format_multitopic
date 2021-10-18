@@ -28,7 +28,7 @@
     }
 }}
 
-        <div class="d-flex">
+        <div class="sectionhead d-flex">
             {{#iscollapsible}}
             <a role="button" data-toggle="collapse"
                href="#coursecontentcollapse{{num}}"
@@ -44,6 +44,11 @@
                     {{#pix}} t/collapsedchevron, core {{/pix}}
                 </span>
             </a>
+            {{/iscollapsible}}
+            {{^iscollapsible}}
+            <span class="icon mr-1 icon-no-margin p-2">
+                <i class="{{fmticon}}"></i>
+            </span>
             {{/iscollapsible}}
             <h3 class="sectionid-{{id}}-title sectionname course-content-item {{^visible}}dimmed{{/visible}}"
                 id="coursecontentsection{{num}}" data-for="section_title" data-id="{{id}}" data-number="{{num}}">

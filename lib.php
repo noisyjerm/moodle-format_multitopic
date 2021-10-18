@@ -1003,11 +1003,7 @@ class format_multitopic extends core_courseformat\base {
                     context_course::instance($section->course));
         }
 
-        $displayvalue = $title = html_writer::tag('i', '', ['class' =>
-                                    ($section->levelsan < FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC ? 'icon fa fa-folder-o fa-fw'
-                                    : (format_multitopic_duration_as_days($section->periodduration) === 0 ? 'icon fa fa-list fa-fw'
-                                                                                                    : ''))])
-                                    . ' ' . get_section_name($section->course, $section);  // CHANGED.
+        $displayvalue = $title = get_section_name($section->course, $section);  // CHANGED.
         // TODO: No icon on collapsible sections?
         if ($linkifneeded) {
             // Display link under the section name, for collapsible sections.

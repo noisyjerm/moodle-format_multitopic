@@ -60,7 +60,7 @@ class header extends header_base {
 
         // REMOVED stealth sections.
         if (!$CFG->linkcoursesections                                           // CHANGED link condition.
-                && ($section->section == $format->get_section_number() || $section->periodduration == '0 day')) {
+                && ($section->levelsan < FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC || $section->periodduration == '0 day')) {
             // Regular section title.
             $data->title = $output->section_title_without_link($section, $course);
         } else if ($section->uservisiblesan) {
@@ -70,6 +70,8 @@ class header extends header_base {
             // Regular section title without link.
             $data->title = $output->section_title_without_link($section, $course);
         }
+
+        $data->fmticon = ($section->levelsan < FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC ? 'icon fa fa-folder-o fa-fw' : 'icon fa fa-list fa-fw');
 
         if (!$section->visible) {
             $data->ishidden = true;
