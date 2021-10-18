@@ -71,7 +71,10 @@ class header extends header_base {
             $data->title = $output->section_title_without_link($section, $course);
         }
 
-        $data->fmticon = ($section->levelsan < FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC ? 'icon fa fa-folder-o fa-fw' : 'icon fa fa-list fa-fw');
+        // ADDED.
+        $data->fmticon = $section->levelsan < FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC ?
+                            'icon fa fa-folder-o fa-fw' : 'icon fa fa-list fa-fw';
+        // END ADDED.
 
         if (!$section->visible) {
             $data->ishidden = true;
