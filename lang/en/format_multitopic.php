@@ -80,6 +80,12 @@ $string['bannerslice']      = 'Banner slice';
 $string['bannerslice_help'] = 'The slice of the course summary image to use in the course banner.
  e.g.  Set to "0%" to use the top of the course summary image in the course banner, "50%" to use the middle, or "100%" to use the bottom.';
 
+$string['collapsibledefault']      = 'Collapsible topics';
+$string['collapsibledefault_help'] = 'Whether topics are collapsible by default.';
+$string['collapsibleoverride']      = 'Collapsible topic override';
+$string['collapsibleoverride_help'] = 'Whether this topic is collapsible.
+ (Not applicable to pages.)';
+
 $string['image']            = 'Image';
 $string['image_by']         = 'by';
 $string['image_licence']    = 'licence';
@@ -94,4 +100,8 @@ $string['move_to_prev_page'] = 'Move to previous page';
 $string['period_0_days']    = 'No time';
 $string['period_undefined'] = 'Unspecified';
 $string['weeks_capitalised'] = 'Weeks';
+$string['weeks_mindays']    = 'First week minimum days of year';
+$string['weeks_mindays_desc'] = 'The first week of the year contains a minimum of how many days of the year?';
+$string['weeks_partial']    = 'Partial weeks';
+$string['weeks_partial_desc'] = 'Whether there are partial weeks at the start and end of the year.';
 // END ADDED.
