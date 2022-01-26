@@ -1,0 +1,57 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template core_courseformat/local/content/section/header
+
+    Displays a course section header.
+
+    Example context (json):
+    {
+        "name": "Section title",
+        "title": "Section title",
+        "url": "#",
+        "ishidden": true
+    }
+}}
+
+        <div class="sectionhead d-flex">
+            {{#iscollapsible}}
+            <a role="button" data-toggle="collapse"
+               href="#coursecontentcollapse{{num}}"
+               id="collapssesection{{num}}"
+               aria-expanded="{{#isactive}}true{{/isactive}}{{^isactive}}false{{/isactive}}"
+               aria-controls="coursecontentcollapse{{num}}"
+               class="btn btn-icon mr-1 icons-collapse-expand {{^isactive}}collapsed{{/isactive}}"
+               aria-label="{{name}}">
+            <span class="expanded-icon icon-no-margin p-2" data-toggle="tooltip" title="{{#str}} collapse, core {{/str}}">
+                {{#pix}} t/expandedchevron, core {{/pix}}
+            </span>
+                <span class="collapsed-icon icon-no-margin p-2" data-toggle="tooltip" title="{{#str}} expand, core {{/str}}">
+                    {{#pix}} t/collapsedchevron, core {{/pix}}
+                </span>
+            </a>
+            {{/iscollapsible}}
+            {{^iscollapsible}}
+            <span class="icon mr-1 icon-no-margin p-2">
+                <i class="{{fmticon}}"></i>
+            </span>
+            {{/iscollapsible}}
+            <h3 class="sectionid-{{id}}-title sectionname course-content-item {{^visible}}dimmed{{/visible}}"
+                id="coursecontentsection{{num}}" data-for="section_title" data-id="{{id}}" data-number="{{num}}">
+                {{{title}}}
+            </h3>
+        </div>

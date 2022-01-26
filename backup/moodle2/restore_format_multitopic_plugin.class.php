@@ -31,7 +31,8 @@
  *
  * @package   format_multitopic
  * @category  backup
- * @copyright 2017 Marina Glancy
+ * @copyright 2020 James Calder and Otago Polytechnic
+ * @copyright based on work by 2017 Marina Glancy
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class restore_format_multitopic_plugin extends restore_format_plugin {

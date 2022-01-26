@@ -19,10 +19,11 @@
  *
  * @since     Moodle 2.0
  * @package   format_multitopic
- * @copyright 2019 James Calder and Otago Polytechnic
- * @copyright based on work by 2009 Sam Hemelryk,
- *            2012 David Herney Bernal - cirano,
- *            2014 Marina Glancy
+ * @copyright 2019 onwards James Calder and Otago Polytechnic
+ * @copyright based on work by 2009 Sam Hemelryk
+ * @copyright based on work by 2012 onwards Marina Glancy
+ * @copyright based on work by 2012 David Herney Bernal - cirano
+ * @copyright based on work by 2020 Ferran Recio <ferran@moodle.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -57,11 +58,14 @@ const FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC   = 2;
  * Main class for the Multitopic course format.
  *
  * @package   format_multitopic
- * @copyright 2019 James Calder and Otago Polytechnic
- * @copyright based on work by 2012 Marina Glancy
+ * @copyright 2019 onwards James Calder and Otago Polytechnic
+ * @copyright based on work by 2009 Sam Hemelryk
+ * @copyright based on work by 2012 onwards Marina Glancy
+ * @copyright based on work by 2012 David Herney Bernal - cirano
+ * @copyright based on work by 2020 Ferran Recio <ferran@moodle.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class format_multitopic extends format_base {
+class format_multitopic extends core_courseformat\base {
 
     // ADDED.
     /** @var int ID of section 0 / the General section, treated as the section root by the Multitopic format */
@@ -74,15 +78,15 @@ class format_multitopic extends format_base {
     private $fmtsectionscomplete = false;
     // END ADDED.
 
-    // INCLUDED declaration /course/format/lib.php class format_base function __construct.
+    // INCLUDED declaration /course/format/classes/base.php class base function __construct.
     /**
      * Creates a new instance of class
      *
-     * Please use see course_get_format() to get an instance of the format class
+     * Please use course_get_format($courseorid) to get an instance of the format class
      *
      * @param string $format
      * @param int $courseid
-     * @return format_base
+     * @return course_format
      */
     protected function __construct($format, $courseid) {
         global $DB;
@@ -95,6 +99,16 @@ class format_multitopic extends format_base {
     // END INCLUDED.
 
     /**
+     * Generate the title for this section page.
+     *
+     * @return string the page title
+     */
+    public function page_title(): string {
+        return get_string_manager()->string_exists('sectionoutline', 'format_multitopic') ?
+                get_string('sectionoutline', 'format_multitopic') : get_string('topicoutline');
+    }
+
+    /**
      * Returns true if this course format uses sections.
      *
      * @return bool
@@ -103,7 +117,19 @@ class format_multitopic extends format_base {
         return true;
     }
 
-    // INCLUDED /course/format/lib functions get_sections and get_section .
+    /**
+     * Returns true if this course format uses course index
+     *
+     * This function may be called without specifying the course id
+     * i.e. in course_index_drawer()
+     *
+     * @return bool
+     */
+    public function uses_course_index() : bool {
+        return true;
+    }
+
+    // INCLUDED /course/format/classes/base functions get_sections and get_section .
     /**
      * Returns a list of sections used in the course.
      *
@@ -450,7 +476,7 @@ class format_multitopic extends format_base {
      * Returns the default section name for the Multitopic course format.
      *
      * If the section number is 0, it will use the string with key = section0name from the course format's lang file.
-     * If the section number is not 0, the base implementation of format_base::get_default_section_name which uses
+     * If the section number is not 0, the base implementation of course_format::get_default_section_name which uses
      * the string with the key = 'sectionname' from the course format's lang file + the section number will be used.
      *
      * @param stdClass $section Section object from database or just field course_sections section
@@ -461,10 +487,31 @@ class format_multitopic extends format_base {
             // Return the general section.
             return get_string('section0name', 'format_multitopic');
         } else {
-            // Use format_base::get_default_section_name implementation which
+            // Use course_format::get_default_section_name implementation which
             // will display the section name in "Section n" format.
             return parent::get_default_section_name($section);
         }
+    }
+
+    /**
+     * Set which section page will be shown.
+     *
+     * @param int|stdClass $singlesection section or num
+     */
+    public function set_section_number($singlesection): void {
+        $singlesection = $this->get_section($singlesection);
+
+        // If display section is a topic, get the page it is on instead.
+        if (isset($singlesection) && $singlesection->level >= FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC) {
+            $sections = $this->fmt_get_sections();
+            $singlesection = $sections[$singlesection->id];
+            if (isset($singlesection) && $singlesection->levelsan >= FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC) {
+                $singlesection = $sections[$singlesection->parentid];
+            }
+        }
+
+        $this->singlesectionid = $singlesection->id;
+        $this->singlesection = $singlesection->section;
     }
 
     /**
@@ -532,6 +579,20 @@ class format_multitopic extends format_base {
     // END INCLUDED.
 
     /**
+     * Returns true if this course format is compatible with content components.
+     *
+     * Using components means the content elements can watch the frontend course state and
+     * react to the changes. Formats with component compatibility can have more interactions
+     * without refreshing the page, like having drag and drop from the course index to reorder
+     * sections and activities.
+     *
+     * @return bool if the format is compatible with components.
+     */
+    public function supports_components() : bool {
+        return true;
+    }
+
+    /**
      * Loads all of the course sections into the navigation.
      *
      * @param global_navigation $navigation
@@ -556,7 +617,7 @@ class format_multitopic extends format_base {
 
         // Check if there are callbacks to extend course navigation.
         // REMOVED function call.
-        // INCLUDED instead /course/format/lib.php function extend_course_navigation body.
+        // INCLUDED instead /course/format/classes/base.php function extend_course_navigation body.
         if ($course = $this->get_course()) {
             $navigationwrapper->load_generic_course_sections($course, $node);   // CHANGED: Wrapped navigation object.
         }
@@ -610,7 +671,7 @@ class format_multitopic extends format_base {
      * Definitions of the additional options that this course format uses for courses.
      *
      * Multitopic format uses the following options:
-     * - periodduration (from Periods format): how long each topic takes.  (Only 1 week or null are currently supported.)
+     * - periodduration (from Periods format): how long each topic takes.  (Only 1 day, 1 week, or null are currently supported.)
      * - hiddensections (from the standard Topics format): whether hidden sections are shown collapsed, or not shown at all.
      * - bannerslice (custom option): how far down the course image to take the banner slice from (0-100).
      *
@@ -719,16 +780,16 @@ class format_multitopic extends format_base {
         return $courseformatoptions;
     }
 
-    // INCLUDED course/format/lib.php function section_format_options declaration.
+    // INCLUDED course/format/classes/base.php function section_format_options declaration.
     /**
      * Definitions of the additional options that this course format uses for section
      *
-     * See see format_base::course_format_options() for return array definition.
+     * See course_format::course_format_options() for return array definition.
      *
      * Additionally section format options may have property 'cache' set to true
      * if this option needs to be cached in see get_fast_modinfo(). The 'cache' property
-     * is recommended to be set only for fields used in see format_base::get_section_name(),
-     * see format_base::extend_course_navigation() and see format_base::get_view_url()
+     * is recommended to be set only for fields used in course_format::get_section_name(),
+     * course_format::extend_course_navigation() and course_format::get_view_url()
      *
      * For better performance cached options are recommended to have 'cachedefault' property
      * Unlike 'default', 'cachedefault' should be static and not access get_config().
@@ -839,7 +900,7 @@ class format_multitopic extends format_base {
     /**
      * Adds format options elements to the course/section edit form.
      *
-     * This function is called from see course_edit_form::definition_after_data().
+     * This function is called from {@see course_edit_form::definition_after_data()}.
      *
      * @param MoodleQuickForm $mform form the elements are added to.
      * @param bool $forsection 'true' if this is a section edit form, 'false' if this is course edit form.
@@ -867,8 +928,8 @@ class format_multitopic extends format_base {
      * If the course format was changed to 'multitopic', we try to copy options
      * 'periodduration', 'hiddensections', and 'bannerslice' from the previous format.
      *
-     * @param stdClass|array $data return value from see moodleform::get_data() or array with data
-     * @param stdClass $oldcourse if this function is called from see update_course()
+     * @param stdClass|array $data return value from {@see moodleform::get_data()} or array with data
+     * @param stdClass $oldcourse if this function is called from {@see update_course()}
      *     this object contains information about the course before update
      * @return bool whether there were any changes to the options values
      */
@@ -899,7 +960,7 @@ class format_multitopic extends format_base {
 
     // TODO: Customise editsection_form to sanitise periodduration?
 
-    // INCLUDED /course/format/lib.php function course_header declaration.
+    // INCLUDED /course/format/classes/base.php function course_header declaration.
     /**
      * Create course header: A banner showing the course name, with a slice of the course image as the background.
      *
@@ -913,7 +974,7 @@ class format_multitopic extends format_base {
     }
     // END INCLUDED.
 
-    // INCLUDED /course/format/lib.php function course_content_header declaration.
+    // INCLUDED /course/format/classes/base.php function course_content_header declaration.
     /**
      * Create course content header when applicable: A "back to course" button.
      *
@@ -922,7 +983,7 @@ class format_multitopic extends format_base {
     public function course_content_header() {
         global $PAGE;
         // Don't show in manage files popup.  TODO: Better way?
-        if (class_exists('format_multitopic_renderer')) {
+        if (class_exists('\format_multitopic\output\renderer')) {
             return new \format_multitopic\coursecontentheaderfooter($PAGE, -1);
         } else {
             return null;
@@ -931,7 +992,7 @@ class format_multitopic extends format_base {
     }
     // END INCLUDED.
 
-    // INCLUDED /course/format/lib.php function course_content_footer declaration.
+    // INCLUDED /course/format/classes/base.php function course_content_footer declaration.
     /**
      * Create course content footer when applicable: Another "back to course" button.
      *
@@ -940,7 +1001,7 @@ class format_multitopic extends format_base {
     public function course_content_footer() {
         global $PAGE;
         // Don't show in manage files popup.  TODO: Better way?
-        if (class_exists('format_multitopic_renderer')) {
+        if (class_exists('\format_multitopic\output\renderer')) {
             return new \format_multitopic\coursecontentheaderfooter($PAGE, 1);
         } else {
             return null;
@@ -949,7 +1010,7 @@ class format_multitopic extends format_base {
     }
     // END INCLUDED.
 
-    // INCLUDED /course/format/lib.php function is_section_current .
+    // INCLUDED /course/format/classes/base.php function is_section_current .
     /**
      * Returns true if the specified section is current.
      *
@@ -1012,7 +1073,7 @@ class format_multitopic extends format_base {
      * @param bool $editable
      * @param null|lang_string|string $edithint
      * @param null|lang_string|string $editlabel
-     * @return inplace_editable
+     * @return \core\output\inplace_editable
      */
     public function inplace_editable_render_section_name($section, $linkifneeded = true,
             $editable = null, $edithint = null, $editlabel = null) : \core\output\inplace_editable {
@@ -1027,7 +1088,7 @@ class format_multitopic extends format_base {
         }
 
         // REMOVED function call.
-        // INCLUDED instead /course/format/lib.php function inplace_editable_render_section_name body.
+        // INCLUDED instead /course/format/classes/base.php function inplace_editable_render_section_name body.
         global $USER, $CFG;
         require_once($CFG->dirroot . '/course/lib.php');
 
@@ -1036,11 +1097,8 @@ class format_multitopic extends format_base {
                     context_course::instance($section->course));
         }
 
-        $displayvalue = $title = html_writer::tag('i', '', ['class' =>
-                                        ($section->levelsan < FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC ? 'icon fa fa-folder-o fa-fw'
-                                                                                                    : 'icon fa fa-list fa-fw')])
-                                    . ' ' . get_section_name($section->course, $section);  // CHANGED.
-        // TODO: Fix collapse icon for AJAX rename, somehow?
+        $displayvalue = $title = get_section_name($section->course, $section);  // CHANGED.
+        // TODO: No icon on collapsible sections?
         if ($linkifneeded) {
             // Display link under the section name, for collapsible sections.
             $navigation = ($section->levelsan < FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC)
@@ -1112,7 +1170,15 @@ class format_multitopic extends format_base {
         // For show/hide actions call the parent method and return the new content for .section_availability element.
         $rv = parent::section_action($section, $action, null);                  // CHANGED: removed section return.
         $renderer = $PAGE->get_renderer('format_multitopic');                   // CHANGED.
-        $rv['section_availability'] = $renderer->section_availability($this->get_section($section));
+
+        if (!($section instanceof section_info)) {
+            $modinfo = $this->get_modinfo();
+            $section = $modinfo->get_section_info($section->section);
+        }
+        $elementclass = $this->get_output_classname('content\\section\\availability');
+        $availability = new $elementclass($this, $section);
+
+        $rv['section_availability'] = $renderer->render($availability);
         return $rv;
     }
 
