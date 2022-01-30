@@ -61,7 +61,8 @@ class content extends content_base {
 
         // INCLUDED from course/format/classes/output/section_renderer.php print_single_section_page() .
         // Can we view the section in question?
-        if (!($sectioninfo = $displaysection) || !$sectioninfo->uservisiblesan) { // CHANGED: Already have section info.
+        if (!($sectioninfo = $displaysection)
+            || (!$sectioninfo->uservisible && $sectioninfo->section != 0)) {    // CHANGED: Already have section info.
             // This section doesn't exist or is not available for the user.
             // We actually already check this in course/view.php but just in case exit from this function as well.
             throw new \moodle_exception(
@@ -94,14 +95,12 @@ class content extends content_base {
             // Show the section if the user is permitted to access it, OR if it's not available
             // but there is some available info text which explains the reason & should display,
             // OR it is hidden but the course has a setting to display hidden sections as unavilable.
-            $showsection = $thissection->uservisiblesan ||
+            $showsection = $thissection->uservisible || ($thissection->section == 0) ||
                     ($thissection->visible || !$course->hiddensections)
                     && ($thissection->available || !empty($thissection->availableinfo));
 
             // Make and add tabs for visible pages.
-            if ($thissection->levelsan <= FORMAT_MULTITOPIC_SECTION_LEVEL_ROOT
-                || $thissection->levelsan < FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC
-                    && $sectionatlevel[$thissection->levelsan - 1]->uservisiblesan && $showsection) {
+            if ($thissection->levelsan < FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC && $showsection) {
 
                 $sectionname = get_section_name($course, $thissection);
 
@@ -121,7 +120,7 @@ class content extends content_base {
                         \html_writer::tag('div', $sectionname, ['class' =>
                             'tab_content'
                             . ($thissection->currentnestedlevel >= $level ? ' marker' : '')
-                            . (!$thissection->visible || !$thissection->available
+                            . ((!$thissection->visible || !$thissection->available) && ($thissection->section != 0)
                                || $level > $thissection->pagedepthdirect ? ' dimmed' : '')
                         ]),
                         $sectionname);
@@ -142,7 +141,7 @@ class content extends content_base {
                 }
 
                 // Disable tabs for hidden sections.
-                if (!$thissection->uservisiblesan) {
+                if (!$thissection->uservisible && ($thissection->section != 0)) {
                     $inactivetabs[] = "tab_id_{$thissection->id}_l{$thissection->levelsan}";
                 }
 
@@ -298,13 +297,12 @@ class content extends content_base {
             // Show the section if the user is permitted to access it, OR if it's not available
             // but there is some available info text which explains the reason & should display,
             // OR it is hidden but the course has a setting to display hidden sections as unavilable.
-            $showsection = $thissection->uservisiblesan ||
+            $showsection = $thissection->uservisible || ($thissection->section == 0) ||
                     ($thissection->visible || !$course->hiddensections)
                     && ($thissection->available || !empty($thissection->availableinfo));
             // REMOVED: return if section hidden.
 
-            if ($thissection->levelsan <= FORMAT_MULTITOPIC_SECTION_LEVEL_ROOT
-                || $sectionatlevel[$level - 1]->uservisiblesan && $showsection) {   // ADDED.
+            if ($showsection) {   // ADDED.
                 $pageid = ($thissection->levelsan < FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC) ? $thissection->id
                                                                                            : $thissection->parentid;
                 $onpage = ($pageid == $format->singlesectionid);

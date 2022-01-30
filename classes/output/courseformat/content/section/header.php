@@ -60,10 +60,11 @@ class header extends header_base {
 
         // REMOVED stealth sections.
         if (!$CFG->linkcoursesections                                           // CHANGED link condition.
-                && ($section->levelsan < FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC || $section->periodduration == '0 day')) {
+                && ($section->levelsan < FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC
+                    || ((($section->collapsible != '') ? $section->collapsible : $course->collapsible) == '0') )) {
             // Regular section title.
             $data->title = $output->section_title_without_link($section, $course);
-        } else if ($section->uservisiblesan) {
+        } else if ($section->uservisible || $section->section == 0) {
             // Regular section title.
             $data->title = $output->section_title($section, $course);
         } else {

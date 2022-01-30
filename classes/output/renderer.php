@@ -60,13 +60,12 @@ class renderer extends section_renderer {
 
         // ADDED.
         // If we're on the view page, patch the URL to use the section ID instead of section number.
-        if ($this->page->url->compare(new \moodle_url('/course/view.php'), URL_MATCH_BASE)
-            && ($id = optional_param('id', null, PARAM_INT))) {
-            $params = ['id' => $id];
-            if ($sectionid = optional_param('sectionid', null, PARAM_INT)) {
-                $params['sectionid'] = $sectionid;
-            }
-            $this->page->set_url('/course/view.php', $params);                  // TODO: Replace just section param, not whole url?
+        if ($this->page->has_set_url()
+                && ($url = $this->page->url)->compare(new \moodle_url('/course/view.php'), URL_MATCH_BASE)
+                &&  $url->get_param('section')
+                && ($sectionid = optional_param('sectionid', null, PARAM_INT))) {
+            $url->remove_params(['section']);
+            $this->page->set_url($url, ['sectionid' => $sectionid]);
         }
         // END ADDED.
 

@@ -74,11 +74,19 @@ class section extends section_base {
         // Determine the section type.
         if ($thissection->levelsan < FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC) {
             $sectionstyle .= ' section-page';
-        } else if (format_multitopic_duration_as_days($thissection->periodduration) === 0) {
-            $sectionstyle .= ' section-topic section-topic-untimed';
         } else {
-            $sectionstyle .= ' section-topic section-topic-timed';
-            $iscollapsible = $onpage;
+            $sectionstyle .= ' section-topic';
+            if (format_multitopic_duration_as_days($thissection->periodduration) === 0) {
+                $sectionstyle .= ' section-topic-untimed';
+            } else {
+                $sectionstyle .= ' section-topic-timed';
+            }
+            if ((($thissection->collapsible != '') ? $thissection->collapsible : $course->collapsible) != '0') {
+                $sectionstyle .= ' section-topic-collapsible section-collapsed';
+                $iscollapsible = $onpage;
+            } else {
+                $sectionstyle .= ' section-topic-noncollapsible';
+            }
         }
         $data->fmtclasses = $sectionstyle;
         $data->iscollapsible = $iscollapsible;
@@ -119,7 +127,7 @@ class section extends section_base {
         // REMOVED index code.
 
         // Add the cm list.
-        if ($thissection->uservisiblesan && $onpage) {                          // CHANGED.
+        if (($thissection->uservisible || $thissection->section == 0) && $onpage) { // CHANGED.
             $cmlist = new $this->cmlistclass($format, $thissection);
             $data->cmlist = $cmlist->export_for_template($output);
         }
