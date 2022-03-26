@@ -15,6 +15,8 @@ Feature: Edit course settings (Multitopic format)
     And the following "course enrolments" exist:
       | user | course | role |
       | teacher1 | C1 | editingteacher |
+    And the following config values are set as admin:
+      | courselistshortnames | 1 |
     And I log in as "teacher1"
     And I am on "Course 1" course homepage
     When I navigate to "Settings" in current page administration
@@ -27,6 +29,7 @@ Feature: Edit course settings (Multitopic format)
     And I should not see "C1"
     And I should see "Edited course fullname"
     And I should see "Edited course shortname"
+    And I am on "Edited course fullname" course homepage
     And I navigate to "Settings" in current page administration
     And the field "Course full name" matches value "Edited course fullname"
     And the field "Course short name" matches value "Edited course shortname"
@@ -39,8 +42,8 @@ Feature: Edit course settings (Multitopic format)
       | name | category | idnumber |
       | Cat 1 | 0 | CAT1 |
     And the following "courses" exist:
-      | category | fullname | shortname | idnumber | format |
-      | CAT1 | Course 1 | Course 1 | C1 | multitopic |
+      | category | fullname | shortname | idnumber |
+      | CAT1 | Course 1 | Course 1 | C1 |
     And I log in as "admin"
     And I go to the courses management page
     And I should see the "Categories" management page
