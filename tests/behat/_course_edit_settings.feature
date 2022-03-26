@@ -25,10 +25,10 @@ Feature: Edit course settings (Multitopic format)
       | Course short name | Edited course shortname |
       | Course summary | Edited course summary |
     And I press "Save and display"
+    And I am on site homepage
     Then I should not see "Course 1"
     And I should not see "C1"
     And I should see "Edited course fullname"
-    And I should see "Edited course shortname"
     And I am on "Edited course fullname" course homepage
     And I navigate to "Settings" in current page administration
     And the field "Course full name" matches value "Edited course fullname"
