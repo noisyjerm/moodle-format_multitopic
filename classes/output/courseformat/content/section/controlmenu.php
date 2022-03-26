@@ -57,8 +57,7 @@ class controlmenu extends controlmenu_base {
         global $USER;
 
         $format = $this->format;
-        $section = $this->section;
-        $section = $format->fmt_get_section($section);       // ADDED.
+        $section = $format->fmt_get_section($this->section);                    // CHANGED.
         $onsectionpage = $section->levelsan < FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC; // ADDED.
         $course = $format->get_course();
         // REMOVED sectionreturn.
@@ -81,13 +80,14 @@ class controlmenu extends controlmenu_base {
                 $streditsection = get_string('editsection');
             }
 
-            $controls['edit'] = array(
+            $controls['edit'] = [
                 'url'   => new \moodle_url('/course/format/multitopic/_course_editsection.php',
-                                         array('id' => $section->id)),          // CHANGED.
+                                         ['id' => $section->id]),               // CHANGED.
                 'icon' => 'i/settings',
                 'name' => $streditsection,
-                'pixattr' => array('class' => ''),
-                'attr' => array('class' => 'icon edit'));
+                'pixattr' => ['class' => ''],
+                'attr' => ['class' => 'icon edit'],
+            ];
         }
 
         if ($section->section) {
@@ -99,13 +99,15 @@ class controlmenu extends controlmenu_base {
                                                 get_string('hidefromothers', 'format_' . $course->format)
                                                 : get_string('hide');           // CHANGED.
                         $url->param('hideid', $section->id);                    // CHANGED.
-                        $controls['visiblity'] = array(
+                        $controls['visiblity'] = [
                             'url' => $url,
                             'icon' => 'i/hide',
                             'name' => $strhidefromothers,
-                            'pixattr' => array('class' => ''),
-                            'attr' => array('class' => 'icon editing_showhide',
-                                ));                                             // REMOVED section return & AJAX action .
+                            'pixattr' => ['class' => ''],
+                            'attr' => [
+                                'class' => 'icon editing_showhide',
+                            ],  // REMOVED section return & AJAX action.
+                        ];
                         // ADDED: AJAX action added back for topic-level sections only.
                         if (!$onsectionpage) {
                             $controls['visiblity']['attr']['data-action'] = 'hide';
@@ -116,13 +118,15 @@ class controlmenu extends controlmenu_base {
                                                 get_string('showfromothers', 'format_' . $course->format)
                                                 : get_string('show');           // CHANGED.
                         $url->param('showid',  $section->id);                   // CHANGED.
-                        $controls['visiblity'] = array(
+                        $controls['visiblity'] = [
                             'url' => $url,
                             'icon' => 'i/show',
                             'name' => $strshowfromothers,
-                            'pixattr' => array('class' => ''),
-                            'attr' => array('class' => 'icon editing_showhide',
-                                )); // REMOVED section return & AJAX action.
+                            'pixattr' => ['class' => ''],
+                            'attr' => [
+                                'class' => 'icon editing_showhide',
+                            ],  // REMOVED section return & AJAX action.
+                        ];
                         // ADDED: AJAX action added back for topic-level sections only.
                         if (!$onsectionpage) {
                             $controls['visiblity']['attr']['data-action'] = 'show';
@@ -145,12 +149,13 @@ class controlmenu extends controlmenu_base {
                             $strmovelevelup = get_string_manager()->string_exists('move_level_up', 'format_multitopic') ?
                                                 get_string('move_level_up', 'format_multitopic') : get_string('moveup');
                             // END CHANGED.
-                            $controls['movelevelup'] = array(                   // CHANGED.
+                            $controls['movelevelup'] = [                        // CHANGED.
                                 'url' => $url,
                                 'icon' => 'i/up',
                                 'name' => $strmovelevelup,
-                                'pixattr' => array('class' => ''),
-                                'attr' => array('class' => 'icon fmtmovelevelup')); // CHANGED.
+                                'pixattr' => ['class' => ''],
+                                'attr' => ['class' => 'icon fmtmovelevelup'],   // CHANGED.
+                            ];
                         }
 
                         $url = clone($baseurl);
@@ -162,12 +167,13 @@ class controlmenu extends controlmenu_base {
                             $strmoveleveldown = get_string_manager()->string_exists('move_level_down', 'format_multitopic') ?
                                                 get_string('move_level_down', 'format_multitopic') : get_string('movedown');
                             // END CHANGED.
-                            $controls['moveleveldown'] = array(                 // CHANGED.
+                            $controls['moveleveldown'] = [                      // CHANGED.
                                 'url' => $url,
                                 'icon' => 'i/down',
                                 'name' => $strmoveleveldown,
-                                'pixattr' => array('class' => ''),
-                                'attr' => array('class' => 'icon fmtmoveleveldown')); // CHANGED.
+                                'pixattr' => ['class' => ''],
+                                'attr' => ['class' => 'icon fmtmoveleveldown'], // CHANGED.
+                            ];
                         }
                     }
                     if (has_capability('moodle/course:movesections', $coursecontext, $user)
@@ -180,12 +186,13 @@ class controlmenu extends controlmenu_base {
                             $url->param('destnextupid', $section->prevupid);
                             $strmovepageprev = get_string_manager()->string_exists('move_page_prev', 'format_multitopic') ?
                                                 get_string('move_page_prev', 'format_multitopic') : get_string('moveleft');
-                            $controls['moveprev'] = array(
+                            $controls['moveprev'] = [
                                 'url' => $url,
                                 'icon' => 't/left',
                                 'name' => $strmovepageprev,
-                                'pixattr' => array('class' => ''),
-                                'attr' => array('class' => 'icon fmtmovepageprev'));
+                                'pixattr' => ['class' => ''],
+                                'attr' => ['class' => 'icon fmtmovepageprev'],
+                            ];
                         }
                         // END CHANGED.
 
@@ -196,12 +203,13 @@ class controlmenu extends controlmenu_base {
                             $url->param('destprevupid', $section->nextupid);
                             $strmovepagenext = get_string_manager()->string_exists('move_page_next', 'format_multitopic') ?
                                                 get_string('move_page_next', 'format_multitopic') : get_string('moveright');
-                            $controls['movenext'] = array(
+                            $controls['movenext'] = [
                                 'url' => $url,
                                 'icon' => 't/right',
                                 'name' => $strmovepagenext,
-                                'pixattr' => array('class' => ''),
-                                'attr' => array('class' => 'icon fmtmovepagenext'));
+                                'pixattr' => ['class' => ''],
+                                'attr' => ['class' => 'icon fmtmovepagenext'],
+                            ];
                         }
                         // END CHANGED.
                     }
@@ -216,12 +224,13 @@ class controlmenu extends controlmenu_base {
                             $url->param('destparentid', $section->prevpageid);
                             $strmovetoprevpage = get_string_manager()->string_exists('move_to_prev_page', 'format_multitopic') ?
                                                  get_string('move_to_prev_page', 'format_multitopic') : get_string('moveleft');
-                            $controls['movetoprevpage'] = array(
+                            $controls['movetoprevpage'] = [
                                 'url' => $url,
                                 'icon' => 't/left',
                                 'name' => $strmovetoprevpage,
-                                'pixattr' => array('class' => ''),
-                                'attr' => array('class' => 'icon fmtmovetoprevpage'));
+                                'pixattr' => ['class' => ''],
+                                'attr' => ['class' => 'icon fmtmovetoprevpage'],
+                            ];
                         }
                         // END CHANGED.
 
@@ -232,12 +241,13 @@ class controlmenu extends controlmenu_base {
                             $url->param('destparentid', $section->nextpageid);
                             $strmovetonextpage = get_string_manager()->string_exists('move_to_next_page', 'format_multitopic') ?
                                                  get_string('move_to_next_page', 'format_multitopic') : get_string('moveright');
-                            $controls['movetonextpage'] = array(
+                            $controls['movetonextpage'] = [
                                 'url' => $url,
                                 'icon' => 't/right',
                                 'name' => $strmovetonextpage,
-                                'pixattr' => array('class' => ''),
-                                'attr' => array('class' => 'icon fmtmovetonextpage'));
+                                'pixattr' => ['class' => ''],
+                                'attr' => ['class' => 'icon fmtmovetonextpage'],
+                            ];
                         }
                         // END CHANGED.
 
@@ -245,30 +255,31 @@ class controlmenu extends controlmenu_base {
                     if (has_capability('moodle/course:movesections', $coursecontext, $user)
                         && has_capability('moodle/course:sectionvisibility', $coursecontext, $user)) {
                         $url = clone($baseurl);
-                        if ($section->section > 1) { // Add a arrow to move section up.
+                        if ($section->prevupid != $section->parentid) { // Add a arrow to move section up.
                             $url->param('sectionid', $section->id);
                             $url->param('destnextupid', $section->prevupid);
                             $strmoveup = get_string('moveup');
-                            $controls['moveup'] = array(
+                            $controls['moveup'] = [
                                 'url' => $url,
                                 'icon' => 'i/up',
                                 'name' => $strmoveup,
-                                'pixattr' => array('class' => ''),
-                                'attr' => array('class' => 'icon moveup'));
+                                'pixattr' => ['class' => ''],
+                                'attr' => ['class' => 'icon moveup'],
+                            ];
                         }
 
                         $url = clone($baseurl);
-                        if ($section->section < $numsections) { // Add a arrow to move section down.
-                            // TODO: Don't use numsections .
+                        if ($section->nextupid != $section->nextpageid) { // Add a arrow to move section down.
                             $url->param('sectionid', $section->id);
                             $url->param('destprevupid', $section->nextupid);
                             $strmovedown = get_string('movedown');
-                            $controls['movedown'] = array(
+                            $controls['movedown'] = [
                                 'url' => $url,
                                 'icon' => 'i/down',
                                 'name' => $strmovedown,
-                                'pixattr' => array('class' => ''),
-                                'attr' => array('class' => 'icon movedown'));
+                                'pixattr' => ['class' => ''],
+                                'attr' => ['class' => 'icon movedown'],
+                            ];
                         }
                     }
                 }
@@ -280,17 +291,25 @@ class controlmenu extends controlmenu_base {
                 } else {
                     $strdelete = get_string('deletesection');
                 }
-                $url = new \moodle_url('/course/format/multitopic/_course_editsection.php', array(
-                    'id' => $section->id,
-                    // REMOVED: section return.
-                    'delete' => 1,
-                    'sesskey' => sesskey()));
-                $controls['delete'] = array(
+                $url = new \moodle_url(
+                    '/course/format/multitopic/_course_editsection.php',
+                    [
+                        'id' => $section->id,
+                        // REMOVED: section return.
+                        'delete' => 1,
+                        'sesskey' => sesskey()
+                    ]
+                );
+                $controls['delete'] = [
                     'url' => $url,
                     'icon' => 'i/delete',
                     'name' => $strdelete,
-                    'pixattr' => array('class' => ''),
-                    'attr' => array('class' => 'icon editing_delete'));
+                    'pixattr' => ['class' => ''],
+                    'attr' => [
+                        'class' => 'icon editing_delete'
+                    ],  // REMOVED: AJAX action.
+                ];
+                // TODO: Add AJAX action added back for topic-level sections?
             }
         }
 

@@ -33,9 +33,9 @@
             <a role="button" data-toggle="collapse"
                href="#coursecontentcollapse{{num}}"
                id="collapssesection{{num}}"
-               aria-expanded="{{#isactive}}true{{/isactive}}{{^isactive}}false{{/isactive}}"
+               aria-expanded="{{^contentcollapsed}}true{{/contentcollapsed}}{{#contentcollapsed}}false{{/contentcollapsed}}"
                aria-controls="coursecontentcollapse{{num}}"
-               class="btn btn-icon mr-1 icons-collapse-expand {{^isactive}}collapsed{{/isactive}}"
+               class="btn btn-icon mr-1 icons-collapse-expand {{#contentcollapsed}}collapsed{{/contentcollapsed}}"
                aria-label="{{name}}">
             <span class="expanded-icon icon-no-margin p-2" data-toggle="tooltip" title="{{#str}} collapse, core {{/str}}">
                 {{#pix}} t/expandedchevron, core {{/pix}}

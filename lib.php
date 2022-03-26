@@ -98,6 +98,22 @@ class format_multitopic extends core_courseformat\base {
     }
     // END INCLUDED.
 
+    // INCLUDED /course/format/classes/base.php class base function get_course_display.
+    /**
+     * Get the course display value for the current course.
+     *
+     * Formats extending topics or weeks will use coursedisplay as this setting name
+     * so they don't need to override the method. However, if the format uses a different
+     * display logic it must override this method to ensure the core renderers know
+     * if a COURSE_DISPLAY_MULTIPAGE or COURSE_DISPLAY_SINGLEPAGE is being used.
+     *
+     * @return int The current value (COURSE_DISPLAY_MULTIPAGE or COURSE_DISPLAY_SINGLEPAGE)
+     */
+    public function get_course_display(): int {
+        return COURSE_DISPLAY_SINGLEPAGE;
+    }
+    // END INCLUDED.
+
     /**
      * Generate the title for this section page.
      *
@@ -1028,6 +1044,30 @@ class format_multitopic extends core_courseformat\base {
     }
     // END INCLUDED.
 
+    // INCLUDED /course/format/classes/base.php function is_section_visible.
+    /**
+     * Returns if an specific section is visible to the current user.
+     *
+     * Formats can overrride this method to implement any special section logic.
+     *
+     * @param section_info $section the section modinfo
+     * @return bool;
+     */
+    public function is_section_visible(section_info $section): bool {
+        // Previous to Moodle 4.0 thas logic was hardcoded. To prevent errors in the contrib plugins
+        // the default logic is the same required for topics and weeks format and still uses
+        // a "hiddensections" format setting.
+        $course = $this->get_course();
+        $hidesections = $course->hiddensections ?? true;
+        // Show the section if the user is permitted to access it, OR if it's not available
+        // but there is some available info text which explains the reason & should display,
+        // OR it is hidden but the course has a setting to display hidden sections as unavilable.
+        return $section->uservisible || ($section->section == 0) ||
+            ($section->visible || !$hidesections)
+            && ($section->available || !empty($section->availableinfo));
+    }
+    // END INCLUDED.
+
     /**
      * Allows to specify for modinfo that section is not available even when it is visible and conditionally available.
      *
@@ -1100,12 +1140,9 @@ class format_multitopic extends core_courseformat\base {
         $displayvalue = $title = get_section_name($section->course, $section);  // CHANGED.
         // TODO: No icon on collapsible sections?
         if ($linkifneeded) {
-            // Display link under the section name, for collapsible sections.
-            $navigation = ($section->levelsan < FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC)
-                        || ((($section->collapsible != '') ? $section->collapsible : $course->collapsible) == '0')
-                        || !$section->uservisible;                              // ADDED.
-            $url = course_get_url($section->course, $section, array('navigation' => $navigation)); // CHANGED.
-            if ($url && !(empty($CFG->linkcoursesections) && $navigation)) {   // CHANGED.
+            // Display link under the section name, if link sections enabled.
+            $url = course_get_url($section->course, $section, array('navigation' => true)); // CHANGED.
+            if ($url) {
                 $displayvalue = html_writer::link($url, $title);
             }
             $itemtype = 'sectionname';

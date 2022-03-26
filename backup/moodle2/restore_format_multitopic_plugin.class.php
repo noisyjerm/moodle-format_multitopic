@@ -61,6 +61,7 @@ class restore_format_multitopic_plugin extends restore_format_plugin {
      * Executed after course restore is complete.
      *
      * This method is only executed if course configuration was overridden.
+     *
      * @return void
      */
     public function after_restore_course() {
@@ -71,6 +72,7 @@ class restore_format_multitopic_plugin extends restore_format_plugin {
             // Backup from another course format.
             return;
         }
+
         $DB->execute(
             "UPDATE {course_format_options} SET value = '0 day'
              WHERE courseid = ? AND format = 'multitopic' AND name = 'periodduration' AND value = '0 days'",

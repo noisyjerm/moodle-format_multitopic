@@ -26,6 +26,7 @@
 namespace format_multitopic\output\courseformat\content;
 
 use core_courseformat\output\local\content\section as section_base;
+use core_courseformat\base as course_format;
 
 /**
  * Base class to render a course section.
@@ -37,51 +38,182 @@ use core_courseformat\output\local\content\section as section_base;
  */
 class section extends section_base {
 
+    // ADDED.
+    /**
+     * Constructor.
+     *
+     * @param course_format $format the course format
+     * @param \section_info $section the section info
+     */
+    public function __construct(course_format $format, \section_info $section) {
+        parent::__construct($format, $section);
+        $this->isstealth = false;
+    }
+    // END ADDED.
+
     /**
      * Export this data so it can be used as the context for a mustache template.
      *
-     * @param renderer_base $output typically, the renderer that's calling this function
-     * @return stdClass data context for a mustache template
+     * @param \renderer_base $output typically, the renderer that's calling this function
+     * @return \stdClass data context for a mustache template
      */
     public function export_for_template(\renderer_base $output): \stdClass {
 
         $format = $this->format;
         $course = $format->get_course();
-        $thissection = $this->thissection;
-        $singlesection = (object) [ 'id' => $format->singlesectionid ];         // CHANGED.
+        $section = $this->section;
 
-        $summary = new $this->summaryclass($format, $thissection);
-        $availability = new $this->availabilityclass($format, $thissection);
-
-        $pageid = ($thissection->levelsan < FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC) ? $thissection->id   // ADDED.
-                                                                                           : $thissection->parentid;
+        $summary = new $this->summaryclass($format, $section);
 
         $data = (object)[
-            'num' => $thissection->section ?? '0',
-            'id' => $thissection->id,
-            'sectionreturnid' => $thissection->section,                         // CHANGED.
+            'num' => $section->section ?? '0',
+            'id' => $section->id,
+            'sectionreturnid' => $section->section,                             // CHANGED.
+            'insertafter' => false,
             'summary' => $summary->export_for_template($output),
-            'availability' => $availability->export_for_template($output),
-            'fmtonpage' => $pageid == $singlesection->id,                       // ADDED.
+            'highlightedlabel' => $format->get_section_highlighted_name(),
+            'sitehome' => $course->id == SITEID,
         ];
 
+        $haspartials = [];
+        $haspartials['availability'] = $this->add_availability_data($data, $output);
+        $haspartials['visibility'] = $this->add_visibility_data($data, $output);
+        $haspartials['editor'] = $this->add_editor_data($data, $output);
+        $haspartials['header'] = $this->add_header_data($data, $output);
+        $haspartials['cm'] = $this->add_cm_data($data, $output);
+        $this->add_format_data($data, $haspartials, $output);
+
+        return $data;
+    }
+
+    /**
+     * Add the section header to the data structure.
+     *
+     * @param \stdClass $data the current cm data reference
+     * @param \renderer_base $output typically, the renderer that's calling this function
+     * @return bool if the cm has name data
+     */
+    protected function add_header_data(\stdClass &$data, \renderer_base $output): bool {
+        if (!empty($this->hidetitle)) {
+            return false;
+        }
+
+        $section = $this->section;
+        $format = $this->format;
+
+        $header = new $this->headerclass($format, $section);
+        $headerdata = $header->export_for_template($output);
+
+        // REMOVED singlesection code.
+        $data->header = $headerdata;
+        return true;
+    }
+
+    /**
+     * Add the section cm list to the data structure.
+     *
+     * @param \stdClass $data the current cm data reference
+     * @param \renderer_base $output typically, the renderer that's calling this function
+     * @return bool if the cm has name data
+     */
+    protected function add_cm_data(\stdClass &$data, \renderer_base $output): bool {
+        $result = false;
+
+        $section = $this->section;
+        $format = $this->format;
+
+        // REMOVED index code.
+
         // ADDED.
-        $pageid = ($thissection->levelsan < FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC) ? $thissection->id
-            : $thissection->parentid;
+        $singlesection = (object) [ 'id' => $format->singlesectionid ];
+        $pageid = ($section->levelsan < FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC) ? $section->id
+            : $section->parentid;
         $onpage = ($pageid == $format->singlesectionid);
-        $sectionstyle = " sectionid-{$thissection->id}";
+        // END ADDED.
+        $showcmlist = ($section->uservisible || $section->section == 0) && $onpage; // CHANGED.
+
+        // REMOVED index code.
+        // Add the cm list.
+        if ($showcmlist) {
+            $cmlist = new $this->cmlistclass($format, $section);
+            $data->cmlist = $cmlist->export_for_template($output);
+            $result = true;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Add the section editor attributes to the data structure.
+     *
+     * @param \stdClass $data the current cm data reference
+     * @param \renderer_base $output typically, the renderer that's calling this function
+     * @return bool if the cm has name data
+     */
+    protected function add_editor_data(\stdClass &$data, \renderer_base $output): bool {
+        if (!$this->format->show_editor()) {
+            return false;
+        }
+
+        $course = $this->format->get_course();
+        if (empty($this->hidecontrols)) {
+            $controlmenu = new $this->controlmenuclass($this->format, $this->section);
+            $data->controlmenu = $controlmenu->export_for_template($output);
+        }
+        // REMOVED stealth section code.
+        $data->cmcontrols = $output->course_section_add_cm_control(
+            $course,
+            $this->section->section
+        ); // REMOVED section return.
+        return true;
+    }
+
+    /**
+     * Add the section format attributes to the data structure.
+     *
+     * @param \stdClass $data the current cm data reference
+     * @param bool[] $haspartials the result of loading partial data elements
+     * @param \renderer_base $output typically, the renderer that's calling this function
+     * @return bool if the cm has name data
+     */
+    protected function add_format_data(\stdClass &$data, array $haspartials, \renderer_base $output): bool {
+        $section = $this->section;
+        $format = $this->format;
+
+        // REMOVED coursedisplay setting.
+
+        if ($section->id == $format->singlesectionid) {
+            $data->collapsemenu = true;
+        }
+
+        $data->contentcollapsed = true;                                         // CHANGED.
+
+        if ($format->is_section_current($section)) {
+            $data->iscurrent = true;
+            $data->currentlink = get_accesshide(
+                get_string('currentsection', 'format_'.$format->get_format())
+            );
+        }
+
+        // ADDED.
+        $course = $this->format->get_course();
+        $singlesection = (object) [ 'id' => $format->singlesectionid ];
+        $pageid = ($section->levelsan < FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC) ? $section->id
+            : $section->parentid;
+        $onpage = ($pageid == $format->singlesectionid);
+        $sectionstyle = " sectionid-{$section->id}";
         $iscollapsible = false;
         // Determine the section type.
-        if ($thissection->levelsan < FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC) {
+        if ($section->levelsan < FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC) {
             $sectionstyle .= ' section-page';
         } else {
             $sectionstyle .= ' section-topic';
-            if (format_multitopic_duration_as_days($thissection->periodduration) === 0) {
+            if (format_multitopic_duration_as_days($section->periodduration) === 0) {
                 $sectionstyle .= ' section-topic-untimed';
             } else {
                 $sectionstyle .= ' section-topic-timed';
             }
-            if ((($thissection->collapsible != '') ? $thissection->collapsible : $course->collapsible) != '0') {
+            if ((($section->collapsible != '') ? $section->collapsible : $course->collapsible) != '0') {
                 $sectionstyle .= ' section-topic-collapsible section-collapsed';
                 $iscollapsible = $onpage;
             } else {
@@ -93,55 +225,7 @@ class section extends section_base {
         $data->fmtonpage = $onpage;
         // END ADDED.
 
-        // REMOVED stealth sections.
-
-        if ($format->show_editor()) {
-            if (empty($this->hidecontrols)) {
-                $controlmenu = new $this->controlmenuclass($format, $thissection);
-                $data->controlmenu = $controlmenu->export_for_template($output);
-            }
-            // REMOVED stealth sections.
-                $data->cmcontrols = $output->course_section_add_cm_control($course, $thissection->section);
-        }
-
-        // REMOVED coursedisplay setting.
-
-        if ($course->id == SITEID) {
-            $data->sitehome = true;
-        }
-
-        // For now sections are always expanded. User preferences will be done in MDL-71211.
-        $data->isactive = false;                                                // CHANGED.
-
-        // REMOVED section 0 special case.
-
-        // When a section is displayed alone the title goes over the section, not inside it.
-        $header = new $this->headerclass($format, $thissection);
-
-        // REMOVED singlesection code.
-
-        if (empty($this->hidetitle)) {
-            $data->header = $header->export_for_template($output);
-        }
-
-        // REMOVED index code.
-
-        // Add the cm list.
-        if (($thissection->uservisible || $thissection->section == 0) && $onpage) { // CHANGED.
-            $cmlist = new $this->cmlistclass($format, $thissection);
-            $data->cmlist = $cmlist->export_for_template($output);
-        }
-
-        if (!$thissection->visible) {
-            $data->ishidden = true;
-        }
-        if ($format->is_section_current($thissection)) {
-            $data->iscurrent = true;
-            $data->currentlink = get_accesshide(
-                get_string('currentsection', 'format_'.$format->get_format())
-            );
-        }
-
-        return $data;
+        return true;
     }
+
 }

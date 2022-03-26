@@ -58,19 +58,13 @@ class header extends header_base {
             'id' => $section->id,
         ];
 
-        // REMOVED stealth sections.
-        if (!$CFG->linkcoursesections                                           // CHANGED link condition.
-                && ($section->levelsan < FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC
-                    || ((($section->collapsible != '') ? $section->collapsible : $course->collapsible) == '0') )) {
-            // Regular section title.
-            $data->title = $output->section_title_without_link($section, $course);
-        } else if ($section->uservisible || $section->section == 0) {
-            // Regular section title.
+        $data->title = $output->section_title_without_link($section, $course);
+
+        if ($CFG->linkcoursesections) {                                         // CHANGED link condition.
             $data->title = $output->section_title($section, $course);
-        } else {
-            // Regular section title without link.
-            $data->title = $output->section_title_without_link($section, $course);
         }
+
+        // REMOVED stealth sections.
 
         // ADDED.
         $data->fmticon = $section->levelsan < FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC ?
@@ -84,6 +78,8 @@ class header extends header_base {
         if ($course->id == SITEID) {
             $data->sitehome = true;
         }
+
+        $data->editing = $format->show_editor();
 
         // REMOVED index page.
 

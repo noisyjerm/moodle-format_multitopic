@@ -81,7 +81,7 @@ class renderer extends section_renderer {
      * course format templatables can be rendered using the core_course/local/* templates.
      * Format plugins are free to override the default template location using render_xxx methods as usual.
      *
-     * @param renderable $widget instance with renderable interface
+     * @param \renderable $widget instance with renderable interface
      * @return string the widget HTML
      */
     public function render(\renderable $widget) {
@@ -116,7 +116,7 @@ class renderer extends section_renderer {
     }
 
     /**
-     * Generate the section title, wraps it in a link to the section if section is collapsible.
+     * Generate the section title.
      *
      * @param section_info|stdClass $section The course_section entry from DB
      * @param stdClass $course The course entry from DB

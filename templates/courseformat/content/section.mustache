@@ -99,7 +99,7 @@
     {{#header}} {{> format_multitopic/courseformat/content/section/header }} {{/header}}
     <div id="coursecontentcollapse{{num}}"
          class="content 
-             {{^sitehome}}course-content-item-content {{#iscollapsible}}collapse{{/iscollapsible}} {{#isactive}}show{{/isactive}}{{/sitehome}}
+             {{^sitehome}}course-content-item-content {{#iscollapsible}}collapse{{/iscollapsible}} {{^contentcollapsed}}show{{/contentcollapsed}}{{/sitehome}}
          ">
         {{#availability}}
             {{> core_courseformat/local/content/section/availability }}

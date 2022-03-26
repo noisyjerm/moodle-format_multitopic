@@ -19,10 +19,13 @@ jobs:
           - 5432:5432
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 3
       mariadb:
-        image: mariadb:10.5 # Moodle 4.0 >=10.2.29 / 10.6 breaks Moodle, see MDL-72131
+        image: mariadb:10 # Moodle 4.0 >=10.2.29
         env:
           MYSQL_USER: 'root'
           MYSQL_ALLOW_EMPTY_PASSWORD: "true"
+          MYSQL_CHARACTER_SET_SERVER: "utf8mb4"
+          MYSQL_COLLATION_SERVER: "utf8mb4_unicode_ci"
+
         ports:
           - 3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval 10s --health-timeout 5s --health-retries 3
@@ -43,6 +46,7 @@ jobs:
           - php: '8.0' # 7.3-7.4
             moodle-branch: 'master'
             database: mariadb
+            # extensions: xmlrpc-beta
 
     steps:
       - name: Check out repository code

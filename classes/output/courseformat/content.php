@@ -196,8 +196,6 @@ class content extends content_base {
 
         // END INCLUDED.
 
-        $addsection = new $this->addsectionclass($format);
-
         // Most formats uses section 0 as a separate section so we remove from the list.
         $sectionseft = $this->export_sections($output);
         $initialsection = '';
@@ -210,7 +208,6 @@ class content extends content_base {
             'tabs' => $tabseft,                                                 // ADDED.
             'initialsection' => $initialsection,
             'sections' => $sectionseft,
-            'numsections' => $addsection->export_for_template($output),
             'format' => $format->get_format(),
         ];
 
@@ -255,6 +252,9 @@ class content extends content_base {
 
         // REMOVED navigation.
 
+        $addsection = new $this->addsectionclass($format);
+        $data->numsections = $addsection->export_for_template($output);
+
         return $data;
     }
 
@@ -294,22 +294,15 @@ class content extends content_base {
 
             // REMOVED: numsections.
 
-            // Show the section if the user is permitted to access it, OR if it's not available
-            // but there is some available info text which explains the reason & should display,
-            // OR it is hidden but the course has a setting to display hidden sections as unavilable.
-            $showsection = $thissection->uservisible || ($thissection->section == 0) ||
-                    ($thissection->visible || !$course->hiddensections)
-                    && ($thissection->available || !empty($thissection->availableinfo));
-            // REMOVED: return if section hidden.
+            if (!$format->is_section_visible($thissection)) {
+                continue;
+            }
 
-            if ($showsection) {   // ADDED.
-                $pageid = ($thissection->levelsan < FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC) ? $thissection->id
-                                                                                           : $thissection->parentid;
-                $onpage = ($pageid == $format->singlesectionid);
-                if ($onpage || $format->show_editor()) {
-                    $sectionseft[] = $section->export_for_template($output);
-                }
-
+            $pageid = ($thissection->levelsan < FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC) ? $thissection->id
+                                                                                        : $thissection->parentid;
+            $onpage = ($pageid == $format->singlesectionid);
+            if ($onpage || $format->show_editor()) {
+                $sectionseft[] = $section->export_for_template($output);
             }
 
         }
