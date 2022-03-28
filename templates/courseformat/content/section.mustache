@@ -79,7 +79,7 @@
         "contentcollapsed": false,
         "numsections": 42,
         "sitehome": false,
-        "highlightedlabel" : "Highlighted"
+        "highlightedlabel" : "Highlighted",
         "testingsection": true
     }
 }}
@@ -141,16 +141,17 @@
             {{^sitehome}}course-content-item-content {{#iscollapsible}}collapse{{/iscollapsible}} {{^contentcollapsed}}show{{/contentcollapsed}}{{/sitehome}}
         ">
         <div class="{{#hasavailability}}description{{/hasavailability}} my-3" data-for="sectioninfo">
-        {{#summary}}
-            {{$ core_courseformat/local/content/section/summary }}
-                {{> core_courseformat/local/content/section/summary }}
-            {{/ core_courseformat/local/content/section/summary }}
-        {{/summary}}
-        {{#availability}}
-            {{$ core_courseformat/local/content/section/availability }}
-                {{> core_courseformat/local/content/section/availability }}
-            {{/ core_courseformat/local/content/section/availability }}
-        {{/availability}}
+            {{#summary}}
+                {{$ core_courseformat/local/content/section/summary }}
+                    {{> core_courseformat/local/content/section/summary }}
+                {{/ core_courseformat/local/content/section/summary }}
+            {{/summary}}
+            {{#availability}}
+                {{$ core_courseformat/local/content/section/availability }}
+                    {{> core_courseformat/local/content/section/availability }}
+                {{/ core_courseformat/local/content/section/availability }}
+            {{/availability}}
+        </div>
         {{#cmsummary}}
             {{$ core_courseformat/local/content/section/cmsummary }}
                 {{> core_courseformat/local/content/section/cmsummary }}
