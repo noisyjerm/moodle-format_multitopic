@@ -55,7 +55,7 @@
         "strmovefull": "Move 'folder example' to this location"
     }
 }}
-<ul class="section img-text {{#hascms}} d-block {{/hascms}}" data-for="cmlist">
+<ul class="section m-0 p-0 img-text {{#hascms}} d-block {{/hascms}}" data-for="cmlist">
 {{#cms}}
     {{#showmovehere}}
     <li class="movehere">
@@ -63,7 +63,9 @@
     </li>
     {{/showmovehere}}
     {{#cmitem}}
-        {{> core_courseformat/local/content/section/cmitem}}
+        {{$ core_courseformat/local/content/section/cmitem}}
+            {{> core_courseformat/local/content/section/cmitem}}
+        {{/ core_courseformat/local/content/section/cmitem}}
     {{/cmitem}}
 {{/cms}}
 {{#showmovehere}}

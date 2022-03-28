@@ -146,9 +146,11 @@ class renderer extends section_renderer {
         }
         // END ADDED.
 
-        return $this->render(course_get_format($course)->inplace_editable_render_section_name($section, $linkifneeded))
+        return  '<div>'
+                . $this->render(course_get_format($course)->inplace_editable_render_section_name($section, $linkifneeded))
                 . \html_writer::empty_tag('br')
-                . \html_writer::tag('span', $datestring, ['class' => 'section_subtitle']); // CHANGED.
+                . \html_writer::tag('span', $datestring, ['class' => 'section_subtitle'])
+                . '</div>';                                                     // CHANGED.
     }
 
     /**

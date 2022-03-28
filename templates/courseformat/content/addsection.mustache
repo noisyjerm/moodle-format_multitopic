@@ -22,12 +22,6 @@
     Example context (json):
     {
         "showaddsection": true,
-        "increase": {
-            "url": "#"
-        },
-        "decrease": {
-            "url": "#"
-        },
         "addsections": {
             "url": "#",
             "title": "Add section",
@@ -38,7 +32,12 @@
 {{#showaddsection}}
 <div id="fmtchangenumsections" class="mdl-right">
     {{#addsections}}
-    <a href="{{{url}}}" class="fmtadd-sections" data-add-sections="{{title}}" data-new-sections="{{newsection}}">
+    <a
+        href="{{{url}}}"
+        class="fmtadd-sections"
+        data-add-sections="{{title}}"
+        data-new-sections="{{newsection}}"
+    >
         {{#pix}} t/add, moodle {{/pix}} {{title}}
     </a>
     {{/addsections}}

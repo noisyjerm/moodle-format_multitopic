@@ -18,6 +18,10 @@ body.format-multitopic #course-header {
     width: 100%;
 }
 
+body.format-multitopic .course-section .inplaceeditable {
+    display: inline;
+}
+
 /* Hide activity navigation.
 Conditional section availability isn't propagated to subsections, so activities may be available when they shouldn't be.
 Not sure how to fix this properly,
