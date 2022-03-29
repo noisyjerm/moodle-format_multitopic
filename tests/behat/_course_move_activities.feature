@@ -28,8 +28,3 @@ Feature: Activities can be moved between sections (Multitopic format)
     When I move "Test forum name" activity to section "2"
     Then I should see "Test forum name" in the "Section 2" "section"
     And I should not see "Test forum name" in the "Section 1" "section"
-
-  @javascript
-  Scenario: Move activity with javascript
-    When I move "Test forum name" activity to section "3"
-    Then I should see "Test forum name" in the "Topic 3" "section"

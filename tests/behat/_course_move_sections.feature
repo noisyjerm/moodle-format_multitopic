@@ -22,6 +22,6 @@ Feature: Sections can be moved (Multitopic format)
 
   Scenario: Move up and down a section with Javascript disabled in a single page course
     When I move down section "1"
-    Then I should see "Test forum name" in the "Topic 2" "section"
+    Then I should see "Test forum name" in the "Section 2" "section"
     And I move up section "2"
-    And I should see "Test forum name" in the "Topic 1" "section"
+    And I should see "Test forum name" in the "Section 1" "section"

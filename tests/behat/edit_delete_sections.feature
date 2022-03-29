@@ -9,8 +9,8 @@ Feature: Sections can be edited and deleted in Multitopic format
       | username | firstname | lastname | email            |
       | teacher1 | Teacher   | 1        | teacher1@example.com |
     And the following "courses" exist:
-      | fullname | shortname | format     | coursedisplay | numsections |
-      | Course 1 | C1        | multitopic | 0             | 5           |
+      | fullname | shortname | format     | coursedisplay | numsections | collapsible |
+      | Course 1 | C1        | multitopic | 0             | 5           | 0           |
     And the following "activities" exist:
       | activity   | name                   | intro                         | course | idnumber    | section |
       | assign     | Test assignment name   | Test assignment description   | C1     | assign1     | 0       |
