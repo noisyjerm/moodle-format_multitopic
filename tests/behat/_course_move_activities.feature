@@ -23,16 +23,13 @@ Feature: Activities can be moved between sections (Multitopic format)
       | section  | 1                      |
     And I log in as "teacher1"
     And I am on "Course 1" course homepage with editing mode on
-    And I add the "Recent activity" block
-    And I follow "Delete Recent activity block"
-    And I press "Yes"
 
   Scenario: Move activities in a single page course with Javascript disabled
     When I move "Test forum name" activity to section "2"
     Then I should see "Test forum name" in the "Section 2" "section"
     And I should not see "Test forum name" in the "Section 1" "section"
 
-  Scenario: Move activities in the course home with Javascript disabled
-    When I move "Test forum name" activity to section "2"
-    Then I should see "Test forum name" in the "Section 2" "section"
-    And I should not see "Test forum name" in the "Section 1" "section"
+  @javascript
+  Scenario: Move activity with javascript
+    When I move "Test forum name" activity to section "3"
+    Then I should see "Test forum name" in the "Topic 3" "section"
