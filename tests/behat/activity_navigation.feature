@@ -42,7 +42,7 @@ Feature: Activity navigation in Multitopic format
       | Level                      | 0         |
     And I edit the section "5" and I fill the form with:
       | Custom                     | 1         |
-      | New Value for Section name | Section E |
+      | New value for Section name | Section E |
       | Level                      | 2         |
     And I click on "Hide" "link" in the "Page 1" activity
     And I click on "Make available" "link" in the "Page 1" activity
