@@ -15,7 +15,8 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * This script allows the number of sections in a course to be increased or decreased, redirecting to the course page.
+ * This script allows the number of sections in a course to be increased
+ * or decreased, redirecting to the course page.
  *
  * CHANGES:
  *  - Use section info instead of section number.

@@ -164,6 +164,7 @@ if (true) {                                                                     
 
     // Must set layout before gettting section info. See MDL-47555.
     $PAGE->set_pagelayout('course');
+    $PAGE->add_body_class('limitedwidth');
 
     if ($section and $section->section > 0) {
         // CHANGED LINE ABOVE: section is now an object. Dereference number property.
@@ -296,6 +297,9 @@ if (true) {                                                                     
         redirect($CFG->wwwroot . '/');
     }
 
+    // Determine whether the user has permission to download course content.
+    $candownloadcourse = \core\content::can_export_context($context, $USER);
+
     // We are currently keeping the button here from 1.x to help new teachers figure out
     // what to do, even though the link also appears in the course admin block.  It also
     // means you can back out of a situation where you removed the admin block. :) .
@@ -347,6 +351,9 @@ if (true) {                                                                     
     // inclusion we pass parameters around this way..
     $displaysection = $section;
 
+    // Include course AJAX
+    include_course_ajax($course, $modnamesused);
+
     // Include the actual course format.
     require($CFG->dirroot . '/course/format/' . $course->format . '/format.php');
     // Content wrapper end.
@@ -358,9 +365,12 @@ if (true) {                                                                     
     // anything after that point.
     course_view(\context_course::instance($course->id), $section->section);      // CHANGED: Dereference section number property.
 
-    // Include course AJAX.
-    include_course_ajax($course, $modnamesused);
+    // If available, include the JS to prepare the download course content modal.
+    if ($candownloadcourse) {
+        $PAGE->requires->js_call_amd('core_course/downloadcontent', 'init');
+    }
 
+    // Load the view JS module if completion tracking is enabled for this course.
     $completion = new \completion_info($course);
     if ($completion->is_enabled()) {
         $PAGE->requires->js_call_amd('core_course/view', 'init');
