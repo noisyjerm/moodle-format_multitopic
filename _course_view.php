@@ -351,7 +351,7 @@ if (true) {                                                                     
     // inclusion we pass parameters around this way..
     $displaysection = $section;
 
-    // Include course AJAX
+    // Include course AJAX.
     include_course_ajax($course, $modnamesused);
 
     // Include the actual course format.

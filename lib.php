@@ -145,6 +145,11 @@ class format_multitopic extends core_courseformat\base {
         return true;
     }
 
+    /**
+     * Returns true if this course format uses activity indentation.
+     *
+     * @return bool if the course format uses indentation.
+     */
     public function uses_indentation(): bool {
         return false;
     }
