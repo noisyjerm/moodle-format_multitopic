@@ -164,6 +164,28 @@ class renderer extends section_renderer {
         return $this->section_title($section, $course, false);                  // CHANGED.
     }
 
+    // INCLUDED course/format/classes/output/section_renderer.php function.
+    /**
+     * Get the course index drawer with placeholder.
+     *
+     * The default course index is loaded after the page is ready. Format plugins can override
+     * this method to provide an alternative course index.
+     *
+     * If the format is not compatible with the course index, this method will return an empty string.
+     *
+     * @param \course_courseformat\base $format the course format
+     * @return String the course index HTML.
+     */
+    public function course_index_drawer(\core_courseformat\base $format): ?String {
+        if ($format->uses_course_index()) {
+            include_course_editor($format);
+            return $this->render_from_template('format_multitopic/courseformat/courseindex/drawer', []);
+            // CHANGED LINE ABOVE.
+        }
+        return '';
+    }
+    // END INCLUDED.
+
     // ADDED.
     /**
      * Generate HTML for course header: A banner with the course title and a slice of the course image.
