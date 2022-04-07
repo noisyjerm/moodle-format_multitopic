@@ -30,6 +30,7 @@
         "current": 1,
         "visible": 1,
         "hasrestrictions": 0,
+        "indent": 0,
         "cms": [
             {
                 "id": 10,
@@ -52,9 +53,11 @@
                 "visible": 0,
                 "isactive": 1
             }
-        ]
+        ],
+        "testingsection": true
     }
 }}
+{{#testingsection}}<div role="tree">{{/testingsection}}
 <div
     class="courseindex-section {{#current}}current{{/current}}"
     id="{{uniqid}}-course-index-section-{{id}}"
@@ -119,6 +122,7 @@
     </div>
 </div>
 {{#js}}
+{{#testingsection}}</div>{{/testingsection}}
 require(['core_courseformat/local/courseindex/section'], function(component) {
     component.init('{{uniqid}}-course-index-section-{{id}}');
 });
