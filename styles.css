@@ -18,7 +18,7 @@ body.format-multitopic #course-header {
     width: 100%;
 }
 
-body.format-multitopic .course-section .inplaceeditable {
+body.format-multitopic ul.sections li.section .sectionname .inplaceeditable {
     display: inline;
 }
 
