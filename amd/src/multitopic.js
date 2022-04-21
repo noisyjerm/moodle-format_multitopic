@@ -53,5 +53,6 @@ export const init = (maxsections) => {
                     return modal;
                 });
         }
+        return true;
     });
 };
