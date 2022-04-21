@@ -32,9 +32,9 @@ import * as Str from 'core/str';
  * @param {number} maxsections maximum number of sections allowed.
  */
 export const init = (maxsections) => {
-    let tabcontent = document.getElementById("adaptable-course-tab-content");
+    let tabcontent = document.getElementsByClassName("course-content");
 
-    tabcontent.addEventListener('click', e => {
+    tabcontent[0].addEventListener('click', e => {
         let cantaddlink = e.target.matches('.cantadd.dimmed');
         if (cantaddlink === false) {
             // Maybe we clicked on a tab.
