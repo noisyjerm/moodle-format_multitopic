@@ -53,6 +53,25 @@ export default class Component extends BaseComponent {
         // Collect section information from the state.
         const exporter = this.reactive.getExporter();
         const data = exporter.course(state);
+        let topSections = [];
+        let topSection = {};
+        let subsection = {};
+        // Let's re-organise our sections.
+        for (let i = 0 ; i < data.sections.length; i++) {
+            let section = data.sections[i];
+            section.subsections = [];
+            if (section.indent == 0) {
+                topSection = section;
+                topSections.push(section);
+            } else if (section.indent == 1) {
+                subsection = section;
+                topSection.subsections.push(section);
+            } else if (section.indent == 2) {
+                // Todo: if a section has topics but no subsections, this probably will not work.
+                subsection.subsections.push(section);
+            }
+        }
+        data.sections = topSections;
         try {
             // To render an HTML into our component we just use the regular Templates module.
             const {html, js} = await Templates.renderForPromise(
