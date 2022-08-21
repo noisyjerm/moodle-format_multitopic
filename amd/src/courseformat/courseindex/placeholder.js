@@ -54,21 +54,38 @@ export default class Component extends BaseComponent {
         const exporter = this.reactive.getExporter();
         const data = exporter.course(state);
         let topSections = [];
-        let topSection = {};
-        let subsection = {};
+        let parentSection = {};
+        let lastParent = {};
+
         // Let's re-organise our sections.
         for (let i = 0 ; i < data.sections.length; i++) {
             let section = data.sections[i];
+            let isCurrent = false;
+            section.indexcollapsed = true;
+            section.contentcollapsed = true;
             section.subsections = [];
-            if (section.indent == 0) {
-                topSection = section;
+            if (window.location.href == section.sectionurl.replace(/&amp;/g, "&")) {
+                isCurrent = true;
+            }
+            if (section.indent === 0) {
+                parentSection = section;
+                lastParent = section;
                 topSections.push(section);
-            } else if (section.indent == 1) {
-                subsection = section;
-                topSection.subsections.push(section);
-            } else if (section.indent == 2) {
-                // Todo: if a section has topics but no subsections, this probably will not work.
-                subsection.subsections.push(section);
+                if (isCurrent) {
+                    section.indexcollapsed = false;
+                    section.contentcollapsed = false;
+                }
+            } else if (section.indent === 1) {
+                lastParent = section;
+                parentSection.subsections.push(section);
+                if (isCurrent) {
+                    parentSection.indexcollapsed = false;
+                    parentSection.contentcollapsed = false;
+                    section.indexcollapsed = false;
+                    section.contentcollapsed = false;
+                }
+            } else if (section.indent === 2) {
+                lastParent.subsections.push(section);
             }
         }
         data.sections = topSections;
