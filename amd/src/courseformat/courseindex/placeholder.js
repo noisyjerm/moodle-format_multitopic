@@ -58,7 +58,7 @@ export default class Component extends BaseComponent {
         let lastParent = {};
 
         // Let's re-organise our sections.
-        for (let i = 0 ; i < data.sections.length; i++) {
+        for (let i = 0; i < data.sections.length; i++) {
             let section = data.sections[i];
             let isCurrent = false;
             section.indexcollapsed = true;
