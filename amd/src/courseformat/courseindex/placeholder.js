@@ -53,11 +53,14 @@ export default class Component extends BaseComponent {
         // Collect section information from the state.
         const exporter = this.reactive.getExporter();
         const data = exporter.course(state);
+
         let topSections = [];
         let parentSection = {};
         let lastParent = {};
 
         // Let's re-organise our sections.
+        // Would be nice to do this in the exporter but that looks to be abstracted many levels deep.
+        // And would require overriding / extending many files.
         for (let i = 0; i < data.sections.length; i++) {
             let section = data.sections[i];
             let isCurrent = false;
@@ -86,9 +89,16 @@ export default class Component extends BaseComponent {
                 }
             } else if (section.indent === 2) {
                 lastParent.subsections.push(section);
+                if (isCurrent) { // Todo: there may be instances where this doesn't work.
+                    parentSection.indexcollapsed = false;
+                    parentSection.contentcollapsed = false;
+                    section.indexcollapsed = false;
+                    section.contentcollapsed = false;
+                }
             }
         }
         data.sections = topSections;
+
         try {
             // To render an HTML into our component we just use the regular Templates module.
             const {html, js} = await Templates.renderForPromise(
