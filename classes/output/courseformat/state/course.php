@@ -75,6 +75,7 @@ class course extends base_course {
         $format = course_get_format($course->id);
         $sections = $format->fmt_get_sections();
         $parentid = null;
+        $lastparentid = null;
 
         foreach ($sections as $section) {
             if ($format->is_section_visible($section)) {
@@ -82,10 +83,14 @@ class course extends base_course {
 
                 if ($section->levelsan <= 0) {
                     $parentid = $section->id;
+                    $lastparentid = $section->id;
                     $data->secondsectionlist[$parentid] = [$section->id]; // Tabs uses first item as parent, Course index might not.
                     $data->firstsectionlist[] = $section->id;
                 } else if ($section->levelsan == 1) {
+                    $lastparentid = $section->id;
                     $data->secondsectionlist[$parentid][] = $section->id;
+                } else if ($section->levelsan == 2) {
+                    $data->thirdsectionlist[$lastparentid][] = $section->id;
                 }
             }
         }

@@ -60,17 +60,7 @@ export default class Component extends ComponentBase {
             const state = this.reactive.stateManager.state;
             const origin = state.section.get(dropdata.id);
             let target = this.section;
-            while (target.levelsan > origin.levelsan) {
-                target = state.section.get(this.course.sectionlist[target.number - 1]);
-            }
-            const moveDirection = Math.sign(target.number - origin.number);
-            let targetEnd = target;
-            while (this.course.sectionlist.length > targetEnd.number + 1
-                    && state.section.get(this.course.sectionlist[targetEnd.number + 1]).levelsan > origin.levelsan) {
-                targetEnd = state.section.get(this.course.sectionlist[targetEnd.number + 1]);
-            }
-            return origin.id != target.id && origin.id != sectionzeroid && target.id != sectionzeroid
-                && this.id == (moveDirection > 0 ? targetEnd : target).id;
+            return target.levelsan <= origin.levelsan && origin.id != sectionzeroid && target.id != sectionzeroid;
         }
         return false;
     }
@@ -81,7 +71,7 @@ export default class Component extends ComponentBase {
      *
      * @param {Object} dropdata the accepted drop data
      */
-     showDropZone(dropdata) {
+    showDropZone(dropdata) {
         if (dropdata.type == 'cm') {
             this.getLastCm()?.classList.add(this.classes.DROPDOWN);
         }
@@ -93,20 +83,27 @@ export default class Component extends ComponentBase {
                 target = state.section.get(this.course.sectionlist[target.number - 1]);
             }
             const moveDirection = Math.sign(target.number - origin.number);
-            let targetEnd = target;
-            while (this.course.sectionlist.length > targetEnd.number + 1
-                    && state.section.get(this.course.sectionlist[targetEnd.number + 1]).levelsan > origin.levelsan) {
-                targetEnd = state.section.get(this.course.sectionlist[targetEnd.number + 1]);
+            let targetShow = target;
+            let targetShowBorder = moveDirection;
+            if (moveDirection > 0 && !target.indexcollapsed) {
+                let targetChild = target;
+                while (this.course.sectionlist.length > targetChild.number + 1
+                && state.section.get(this.course.sectionlist[targetChild.number + 1]).levelsan > target.levelsan) {
+                    targetChild = state.section.get(this.course.sectionlist[targetChild.number + 1]);
+                    if (targetChild.levelsan <= origin.levelsan) {
+                        targetShow = targetChild;
+                        targetShowBorder = -1;
+                        break;
+                    }
+                }
             }
             const targetHTML = document.querySelector(
-                ".courseindex-section[data-id='" + (moveDirection <= 0 ? target : targetEnd).id + "']");
+                ".courseindex-section[data-id='" + targetShow.id + "']");
             // The relative move of section depends on the section number.
-            if (moveDirection > 0) {
-                targetHTML.classList.remove(this.classes.DROPUP);
+            if (targetShowBorder > 0) {
                 targetHTML.classList.add(this.classes.DROPDOWN);
-            } else {
+            } else if (targetShowBorder < 0) {
                 targetHTML.classList.add(this.classes.DROPUP);
-                targetHTML.classList.remove(this.classes.DROPDOWN);
             }
         }
     }
@@ -119,7 +116,8 @@ export default class Component extends ComponentBase {
     hideDropZone(dropdata) {
         if (dropdata.type == 'cm') {
             this.getLastCm()?.classList.remove(this.classes.DROPDOWN);
-        } else {
+        }
+        if (dropdata.type == 'section') {
             const state = this.reactive.stateManager.state;
             const origin = state.section.get(dropdata.id);
             let target = this.section;
@@ -127,15 +125,27 @@ export default class Component extends ComponentBase {
                 target = state.section.get(this.course.sectionlist[target.number - 1]);
             }
             const moveDirection = Math.sign(target.number - origin.number);
-            let targetEnd = target;
-            while (this.course.sectionlist.length > targetEnd.number + 1
-                    && state.section.get(this.course.sectionlist[targetEnd.number + 1]).levelsan > origin.levelsan) {
-                targetEnd = state.section.get(this.course.sectionlist[targetEnd.number + 1]);
+            let targetShow = target;
+            let targetShowBorder = moveDirection;
+            if (moveDirection > 0 && !target.indexcollapsed) {
+                let targetChild = target;
+                while (this.course.sectionlist.length > targetChild.number + 1
+                && state.section.get(this.course.sectionlist[targetChild.number + 1]).levelsan > target.levelsan) {
+                    targetChild = state.section.get(this.course.sectionlist[targetChild.number + 1]);
+                    if (targetChild.levelsan <= origin.levelsan) {
+                        targetShow = targetChild;
+                        targetShowBorder = -1;
+                        break;
+                    }
+                }
             }
             const targetHTML = document.querySelector(
-                ".courseindex-section[data-id='" + (moveDirection <= 0 ? target : targetEnd).id + "']");
-            targetHTML.classList.remove(this.classes.DROPUP);
-            targetHTML.classList.remove(this.classes.DROPDOWN);
+                ".courseindex-section[data-id='" + targetShow.id + "']");
+            if (targetShowBorder > 0) {
+                targetHTML.classList.remove(this.classes.DROPDOWN);
+            } else if (targetShowBorder < 0) {
+                targetHTML.classList.remove(this.classes.DROPUP);
+            }
         }
     }
 
@@ -156,7 +166,21 @@ export default class Component extends ComponentBase {
             while (target.levelsan > origin.levelsan) {
                 target = state.section.get(this.course.sectionlist[target.number - 1]);
             }
-            this.reactive.dispatch('fmtSectionMove', origin, target);
+            const moveDirection = Math.sign(target.number - origin.number);
+            let targetCall = target;
+            if (moveDirection > 0 && target.indexcollapsed) {
+                let targetChild = target;
+                while (this.course.sectionlist.length > targetChild.number + 1
+                && state.section.get(this.course.sectionlist[targetChild.number + 1]).levelsan > target.levelsan) {
+                    targetChild = state.section.get(this.course.sectionlist[targetChild.number + 1]);
+                    if (targetChild.levelsan <= origin.levelsan) {
+                        targetCall = targetChild;
+                    }
+                }
+            }
+            if (moveDirection != 0) {
+                this.reactive.dispatch('fmtSectionMove', origin, targetCall);
+            }
         }
     }
 
@@ -166,13 +190,13 @@ export default class Component extends ComponentBase {
      * @param {Object} param details the update details.
      * @param {Object} param.element the section element
      */
-     _refreshSection({element}) {
+    _refreshSection({element}) {
         super._refreshSection({element});
         const linkHTML = this.element.querySelector("a.courseindex-link");
         const link = element.sectionurl.replace("&amp;", "&");
         if (linkHTML.href != link) {
             linkHTML.href = link;
         }
-     }
+    }
 
 }
