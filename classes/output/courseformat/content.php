@@ -58,22 +58,22 @@ class content extends content_base {
         $canaddmore = $maxsections > $format->get_last_section_number();
         $displaysection = $sections[$this->format->singlesectionid];
         $activesectionids = [];
-        for ($activsn = $displaysection; $activsn; $activsn = ($activsn->parentid ? $sections[$activsn->parentid] : null)) {
-            $activesectionids[$activsn->id] = true;
+        for ($activesn = $displaysection; /* ... */
+                $activesn; /* ... */
+                $activesn = (($activesn->parentid
+                    && ($activesn->levelsan > FORMAT_MULTITOPIC_SECTION_LEVEL_ROOT + 1
+                        || $activesn->parentid != $format->fmtrootsectionid))
+                    ? $sections[$activesn->parentid] : null)) {
+            $activesectionids[$activesn->id] = true;
         }
-        $sectionsinactive = [];
-        $sectionscollapsible = [];
-        foreach ($sections as $section) {
-            if (!array_key_exists($section->id, $activesectionids)) {
-                $sectionsinactive[] = $section->id;
-            }
-            if ($section->levelsan >= FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC
-                && ((($section->collapsible != '') ? $section->collapsible : $course->collapsible) != '0')) {
-                $sectionscollapsible[] = $section->id;
+        $indexcollapsedold = $format->get_sections_preferences_by_preference()['indexcollapsed'];
+        $indexcollapsed = [];
+        foreach ($indexcollapsedold as $sectionid) {
+            if (!isset($activesectionids[$sectionid])) {
+                $indexcollapsed[] = $sectionid;
             }
         }
-        $format->set_sections_preference('indexcollapsed', $sectionsinactive);
-        $format->set_sections_preference('contentcollapsed', $sectionscollapsible);
+        $format->set_sections_preference('indexcollapsed', $indexcollapsed);
         // END ADDED.
 
         $user = $USER;                              // INCLUDED from course/format/classes/output/local/content/section/cmlist.php .

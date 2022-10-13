@@ -531,6 +531,45 @@ class format_multitopic extends core_courseformat\base {
     // END INCLUDED.
 
     /**
+     * Return the format section preferences.
+     *
+     * @return array of preferences indexed by preference name
+     */
+    public function get_sections_preferences_by_preference(): array {
+        $sectionpreferences = parent::get_sections_preferences_by_preference();
+        $course = $this->get_course();
+        $sections = $this->fmt_get_sections();
+        if (!isset($sectionpreferences['indexcollapsed'])) {
+            $indexcollapsed = [];
+            foreach ($sections as $section) {
+                if ($section->levelsan > FORMAT_MULTITOPIC_SECTION_LEVEL_ROOT) {
+                    $indexcollapsed[] = $section->id;
+                }
+            }
+            $sectionpreferences['indexcollapsed'] = $indexcollapsed;
+        }
+        $contentcollapsed = [];
+        if (isset($sectionpreferences['contentcollapsed'])) {
+            foreach ($sectionpreferences['contentcollapsed'] as $sectionid) {
+                $section = $sections[$sectionid];
+                if ($section->levelsan >= FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC
+                    && ((($section->collapsible != '') ? $section->collapsible : $course->collapsible) != '0')) {
+                    $contentcollapsed[] = $sectionid;
+                }
+            }
+        } else {
+            foreach ($sections as $section) {
+                if ($section->levelsan >= FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC
+                    && ((($section->collapsible != '') ? $section->collapsible : $course->collapsible) != '0')) {
+                    $contentcollapsed[] = $section->id;
+                }
+            }
+        }
+        $sectionpreferences['contentcollapsed'] = $contentcollapsed;
+        return $sectionpreferences;
+    }
+
+    /**
      * The URL to use for the specified course (with section).
      *
      * @param int|stdClass $section Section object from database or just field course_sections.section
