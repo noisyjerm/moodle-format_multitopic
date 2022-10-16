@@ -49,6 +49,53 @@ export default class Component extends BaseComponent {
     }
 
     /**
+     * Initial state ready method.
+     *
+     * @param {Object} state the state data
+     */
+    stateReady(state) {
+        super.stateReady(state);
+
+        // Set the initial state of collapsible sections.
+        this.fmtCollapseOnHashChange();
+
+        // Capture clicks on course section links.
+        window.addEventListener("hashchange", this.fmtCollapseOnHashChange);
+
+    }
+
+    /**
+     * Expand, and scroll to, the section specified in the URL bar.
+     *
+     * @param {HashChangeEvent?} event The triggering event, if any
+     */
+    fmtCollapseOnHashChange(event) {
+
+        // Find the specified section.
+        var anchor = window.location.hash.substr(1);
+        var selSectionDom = anchor ?
+            document.querySelector("body.format-multitopic .course-content ul.sections li.section.section-topic." + anchor)
+            : null;
+
+        // Exit if there is an event, but no recognised section.
+        if (event && !selSectionDom) {
+            return;
+        }
+
+        // Expand, if appropriate.
+        if (selSectionDom && selSectionDom.matches(".section-topic-collapsible")
+                && selSectionDom.querySelector(".course-section-header .icons-collapse-expand.collapsed")) {
+            selSectionDom.querySelector(".course-section-header .icons-collapse-expand").click();
+        }
+
+        // Scroll to the specified section.
+        if (selSectionDom) {
+            selSectionDom.scrollIntoView();
+        }
+
+    }
+
+    /**
      * Handle the collapse/expand all sections button.
      *
      * Toggler click is delegated to the main course content element because new sections can

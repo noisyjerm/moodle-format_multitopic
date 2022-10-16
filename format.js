@@ -133,37 +133,6 @@ M.course.format.process_sections = function(Y, sectionlist, response, sectionfro
 // REMAINDER ADDED.
 
 /**
- * Expand, and scroll to, the section specified in the URL bar.
- *
- * @param {HashChangeEvent?} event The triggering event, if any
- */
-M.course.format.fmtCollapseOnHashChange = function(event) {
-
-    // Find the specified section.
-    var anchor = window.location.hash.substr(1);
-    var selSectionDom = anchor ?
-                    document.querySelector("body.format-multitopic .course-content ul.sections li.section.section-topic." + anchor)
-                    : null;
-
-    // Exit if there is an event, but no recognised section.
-    if (event && !selSectionDom) {
-        return;
-    }
-
-    // Expand, if appropriate.
-    if (selSectionDom && selSectionDom.matches(".section-topic-collapsible")
-            && selSectionDom.querySelector(".course-section-header .icons-collapse-expand.collapsed")) {
-        selSectionDom.querySelector(".course-section-header .icons-collapse-expand").click();
-    }
-
-    // Scroll to the specified section.
-    if (selSectionDom) {
-        selSectionDom.scrollIntoView();
-    }
-
-};
-
-/**
  * Update the First and Second level tabs.
  * @param {event} e
  */
@@ -211,11 +180,6 @@ M.course.format.fmtWarnMaxsections = function(e) {
  */
 M.course.format.fmtInit = function(Y, max) {
     M.course.format.fmtMaxsections = max;
-    // Set the initial state of collapsible sections.
-    M.course.format.fmtCollapseOnHashChange();
-
-    // Capture clicks on course section links.
-    window.addEventListener("hashchange", M.course.format.fmtCollapseOnHashChange);
 
     // Add listener for section name inplace edited.
     require(['jquery'], function($) {
