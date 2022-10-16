@@ -41,16 +41,14 @@ use core\output\inplace_editable;
 // ADDED.
 /** @var int The level of the General section, which represents the course as a whole.
  * Set to -1, to be a level above the top-level sections in OneTopic format, which are numbered 0.
- * NOTE: Not sure this can be changed without breaking stuff.
+ * NOTE: None of these constants can be changed anymore, as parts of the code assume these values.
  */
 const FORMAT_MULTITOPIC_SECTION_LEVEL_ROOT    = -1;
 
 /** @var int Deepest level of page to let users create.  Must be between the root level and the topic level. */
 const FORMAT_MULTITOPIC_SECTION_LEVEL_PAGE_USE = 1;
 
-/** @var int Level of topics, which are displayed within pages.
- * NOTE: This could have been made larger, to allow more page levels, but more page levels seemed too confusing.
- */
+/** @var int Level of topics, which are displayed within pages. */
 const FORMAT_MULTITOPIC_SECTION_LEVEL_TOPIC   = 2;
 // END ADDED.
 
