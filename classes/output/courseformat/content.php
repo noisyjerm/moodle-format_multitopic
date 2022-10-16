@@ -66,10 +66,10 @@ class content extends content_base {
                     ? $sections[$activesn->parentid] : null)) {
             $activesectionids[$activesn->id] = true;
         }
-        $indexcollapsedold = $format->get_sections_preferences_by_preference()['indexcollapsed'];
+        $sectionpreferencesarray = $format->get_sections_preferences();
         $indexcollapsed = [];
-        foreach ($indexcollapsedold as $sectionid) {
-            if (!isset($activesectionids[$sectionid])) {
+        foreach ($sectionpreferencesarray as $sectionid => $sectionpreferences) {
+            if (!empty($sectionpreferences->indexcollapsed) && !isset($activesectionids[$sectionid])) {
                 $indexcollapsed[] = $sectionid;
             }
         }
